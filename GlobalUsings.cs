@@ -1,4 +1,9 @@
-﻿global using MinimalAPI2026Demo.Extensions;
+﻿global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using System.ComponentModel.DataAnnotations; 
+global using MinimalAPI2026Demo.Data;
+global using MinimalAPI2026Demo.Models;
+global using MinimalAPI2026Demo.Extensions;
 global using MinimalAPI2026Demo.Models.Response;
 global using MinimalAPI2026Demo.Endpoints.Home;
 //global using MinimalAPI2026Demo.Models.Request
