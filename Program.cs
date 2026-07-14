@@ -1,5 +1,3 @@
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,15 +15,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.MapGet("/api/Welcome", () => {
-    var response = new
-    {
-        Message = "Welcome to ASP.NET Core 10.0 Minimal API Demonstration!",
-        Version = "1.0.0" ,
-        TimeOnly = DateTime.Now.ToString("T")
-    };
-    return Results.Ok(response);
-
-    }).WithName("WelcomeMessage");
+app.MapHomeEndpoints(); // Map the Home endpoints
 app.Run();
 
