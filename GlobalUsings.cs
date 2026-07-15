@@ -1,7 +1,12 @@
 ﻿global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Identity.UI.Services;
 global using System.ComponentModel.DataAnnotations; 
 global using MinimalAPI2026Demo.Data;
+global using MinimalAPI2026Demo.Middleware;
+global using MinimalAPI2026Demo.Services;
+
+
 global using MinimalAPI2026Demo.Models;
 global using MinimalAPI2026Demo.Extensions;
 global using MinimalAPI2026Demo.Models.Response;

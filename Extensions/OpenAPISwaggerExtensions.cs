@@ -53,6 +53,31 @@ namespace MinimalAPI2026Demo.Extensions
                     {
                         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
                     });
+                    // Hide specific endpoints from Swagger documentation
+                    string[] hiddenEndpoints = [
+                        "api/auth/register",
+                        "api/auth/refresh",
+                        "api/auth/confirmemail",
+                        "api/auth/resendconfirmationemail",
+                        "api/auth/forgotpassword",
+                        "api/auth/resetpassword",
+                        "api/auth/manage",
+                        "api/auth/manage/info",
+                        "api/auth/manage/2fa",
+
+                        ];
+
+                    c. DocInclusionPredicate((docName, apiDesc) => 
+                    { 
+                        var path = apiDesc.RelativePath?.ToLowerInvariant();
+                        if (path == null) return false;
+                        if(hiddenEndpoints.Contains(path, StringComparer.OrdinalIgnoreCase))
+                        {
+
+                            return false; //if the path is in the hiddenEndpoints array, exclude it from Swagger documentation
+                        }
+                        return true;
+                    });
                 });
             return services;
         }

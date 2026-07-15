@@ -7,6 +7,19 @@ builder.Services.AddCustomSwagger();
 var connectionString = DataUtility.GetConnectionString(builder.Configuration);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
+// Add Identity services
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+//Admin policy
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
+//enable validation
+builder.Services.AddValidation();
 
 var app = builder.Build();
 
@@ -19,7 +32,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseMiddleware<BlockIdentityEndpoints>();
 
+var authRouteGroup = app.MapGroup("api/auth").WithTags("Admin");
+authRouteGroup.MapIdentityApi<ApplicationUser>();
 app.MapHomeEndpoints(); // Map the Home endpoints
 app.Run();
 
