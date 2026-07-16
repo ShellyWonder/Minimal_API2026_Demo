@@ -26,10 +26,52 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
                  .Produces(StatusCodes.Status200OK)
                  .Produces(StatusCodes.Status400BadRequest);
 
+            group.MapPost("/forgot-password", ForgotPassword)  // ("/route", handler method)
+                 .WithName("ForgotPassword")
+                 .WithDescription("This endpoint orchestrates forgot password workflow.")
+                 .WithSummary("Forgot user password")
+                 .Produces(StatusCodes.Status200OK)
+                 .Produces(StatusCodes.Status400BadRequest);
+
 
             return route;
         }
         #region Handler Methods
+        private static async Task<IResult> ForgotPassword(ForgotPasswordRequest request,
+                                                    UserManager<ApplicationUser> userManager,
+                                                    IEmailSender emailSender,
+                                                    IConfiguration config)
+        {
+            if (string.IsNullOrEmpty(request.Email)) 
+                return Results.BadRequest((new { Message = "Email is required." }));
+
+            //Find the user by email
+            var user = await userManager.FindByEmailAsync(request.Email);
+            if (user is null)
+                return Results.Ok(new { Message = "If user exists a reset password link will be sent." });
+
+            //Generate a resetToken
+            var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+            //Encode the token to make it URL-safe
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
+
+            var baseURL = config["BaseUrl"] ?? "https://localhost:7166"; //Route to the frontend page for email confirmation
+            var resetLink = $"{baseURL}/reset-password?email={request.Email}&resetCode={encodedToken}";
+
+            //TODO: Implement a proper email sending service and template for production use
+            await emailSender.SendEmailAsync(request.Email,
+                 "Reset your password.",
+                $"""
+               
+                Please reset your password by clicking this link: <a href='{resetLink}'>link</a>
+                """
+                );
+
+            // Return the route result with the custom identity information
+            return Results.Ok(new { Message = "If user exists a reset password link will be sent" });
+
+        }
+      
         // Handler methods for the custom identity info endpoint
         private static async Task<IResult> ResetPassword(ResetPasswordRequest request,
                                                         UserManager<ApplicationUser> userManager)
@@ -64,7 +106,6 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
             }
 
         }
-
         private static async Task<IResult> RegisterUser(RegisterUserRequest request,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
@@ -112,6 +153,8 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
             // Return the route result with the custom identity information
             return Results.Ok(new { Message = $"User {user.Email} registered successfully. Password reset link sent to email." });
         }
+
+       
         #endregion
     }
 }
