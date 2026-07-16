@@ -10,7 +10,7 @@
         private static readonly string[] _blockedPaths =
         [
             "/api/auth/register",
-            "/api/auth/resetpassword",
+            "/api/auth/reinitpassword",
             "/api/auth/forgotpassword",
             "/api/auth/manage/info",
             "/api/auth/manage/profile"

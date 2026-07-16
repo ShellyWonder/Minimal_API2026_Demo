@@ -60,7 +60,7 @@ namespace MinimalAPI2026Demo.Extensions
                         "api/auth/confirmemail",
                         "api/auth/resendconfirmationemail",
                         "api/auth/forgotpassword",
-                        "api/auth/resetpassword",
+                        "api/auth/reinitpassword",
                         "api/auth/manage",
                         "api/auth/manage/info",
                         "api/auth/manage/2fa",

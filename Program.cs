@@ -1,4 +1,3 @@
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -38,6 +37,7 @@ app.UseMiddleware<BlockIdentityEndpoints>();
 
 var authRouteGroup = app.MapGroup("api/auth").WithTags("Admin");
 authRouteGroup.MapIdentityApi<ApplicationUser>();
+app.MapCustomIdentityEndpoints(); // Map the custom identity endpoints
 app.MapHomeEndpoints(); // Map the Home endpoints
 app.Run();
 

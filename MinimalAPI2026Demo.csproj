@@ -13,8 +13,8 @@
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.7.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.9">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAsinits>all</PrivateAsinits>
+      <IncludeAsinits>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAsinits>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />

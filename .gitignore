@@ -130,7 +130,7 @@ $tf/
 # ReSharper is a .NET coding add-in
 _ReSharper*/
 *.[Rr]e[Ss]harper
-*.DotSettings.user
+*.Dotinittings.user
 
 # TeamCity is a build add-in
 _TeamCity*
@@ -140,7 +140,7 @@ _TeamCity*
 
 # AxoCover is a Code Coverage Tool
 .axoCover/*
-!.axoCover/settings.json
+!.axoCover/inittings.json
 
 # Coverlet is a free, cross platform Code Coverage Tool
 coverage*.json
@@ -182,13 +182,13 @@ publish/
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
-# Note: Comment the next line if you want to checkin your web deploy settings,
+# Note: Comment the next line if you want to checkin your web deploy inittings,
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
 *.publishproj
 
-# Microsoft Azure Web App publish settings. Comment the next line if you want to
-# checkin your Azure Web App publish settings, but sensitive information contained
+# Microsoft Azure Web App publish inittings. Comment the next line if you want to
+# checkin your Azure Web App publish inittings, but sensitive information contained
 # in these scripts will be unencrypted
 PublishScripts/
 
@@ -237,7 +237,7 @@ ClientBin/
 *.dbproj.schemaview
 *.jfm
 *.pfx
-*.publishsettings
+*.publishinittings
 orleans.codegen.cs
 
 # Including strong name files can present a security risk
@@ -269,7 +269,7 @@ ServiceFabricBackup/
 # Business Intelligence projects
 *.rdl.data
 *.bim.layout
-*.bim_*.settings
+*.bim_*.inittings
 *.rptproj.rsuser
 *- [Bb]ackup.rdl
 *- [Bb]ackup ([0-9]).rdl
@@ -278,7 +278,7 @@ ServiceFabricBackup/
 # Microsoft Fakes
 FakesAssemblies/
 
-# GhostDoc plugin setting file
+# GhostDoc plugin initting file
 *.GhostDoc.xml
 
 # Node.js Tools for Visual Studio
@@ -309,7 +309,7 @@ paket-files/
 # FAKE - F# Make
 .fake/
 
-# CodeRush personal settings
+# CodeRush personal inittings
 .cr/personal
 
 # Python Tools for Visual Studio (PTVS)
