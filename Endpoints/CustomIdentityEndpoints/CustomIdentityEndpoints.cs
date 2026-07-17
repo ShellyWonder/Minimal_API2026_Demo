@@ -47,9 +47,17 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
                  .WithName("UpdateProfile")
                  .WithDescription("Update current user profile information")
                  .WithSummary("Allows current user to update their profile")
-                //.Produces(StatusCodes.Status200OK)
-                //.Produces(StatusCodes.Status401Unauthorized)
-                //.Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status404NotFound)
+                .RequireAuthorization();
+
+            group.MapGet("/manage/users", ListAllUsers)  // ("/route", handler method)
+                 .WithName("ListUsers")
+                 .WithDescription("Get all users")
+                 .WithSummary("Allows current user to get a list of all registered app users.")
+                .Produces<IEnumerable<UserProfileResponse>>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status401Unauthorized)
                 .RequireAuthorization();
 
 
@@ -58,6 +66,22 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
 
         #region Handler Methods
         // Handler methods for the custom identity info endpoint
+        private static async Task<IResult> ListAllUsers(UserManager<ApplicationUser> userManager)
+        {
+            var users = userManager.Users
+                               .Select(u => new UserProfileResponse
+                                   {
+                                       Id = u.Id,
+                                       FirstName = u.FirstName,
+                                       LastName = u.LastName,
+                                       FullName = u.FullName,
+                                       Email = u.Email,
+                                   })
+                              .ToList();
+
+            return Results.Ok(users);
+        }
+
         private static async Task<IResult> UpdateProfile(UpdateUserProfileRequest request,
                                                        UserManager<ApplicationUser> userManager,
                                                        ClaimsPrincipal principal)
