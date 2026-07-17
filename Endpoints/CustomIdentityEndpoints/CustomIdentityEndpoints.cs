@@ -40,6 +40,16 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
                  .WithSummary("Get user profile")
                  .Produces(StatusCodes.Status200OK)
                  .Produces(StatusCodes.Status404NotFound)
+                 .Produces(StatusCodes.Status401Unauthorized)
+                .RequireAuthorization();
+
+            group.MapPut("/manage/profile", UpdateProfile)  // ("/route", handler method)
+                 .WithName("UpdateProfile")
+                 .WithDescription("Update current user profile information")
+                 .WithSummary("Allows current user to update their profile")
+                //.Produces(StatusCodes.Status200OK)
+                //.Produces(StatusCodes.Status401Unauthorized)
+                //.Produces(StatusCodes.Status404NotFound)
                 .RequireAuthorization();
 
 
@@ -48,6 +58,25 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
 
         #region Handler Methods
         // Handler methods for the custom identity info endpoint
+        private static async Task<IResult> UpdateProfile(UpdateUserProfileRequest request,
+                                                       UserManager<ApplicationUser> userManager,
+                                                       ClaimsPrincipal principal)
+        {
+            //validate inputs           
+            if (string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.LastName))
+                return Results.BadRequest(new { Message = "First name and last name are required." });
+            var currentUser = await userManager.GetUserAsync(principal);
+            if (currentUser == null) return Results.NotFound();
+            currentUser.FirstName = request.FirstName;
+            currentUser.LastName = request.LastName;
+
+            var result = await userManager.UpdateAsync(currentUser);
+            if (!result.Succeeded) return Results.BadRequest(new { Message = "Update failed." });
+
+
+            return Results.Ok();
+        }
+
         private static async Task<IResult> GetProfileInfo(UserManager<ApplicationUser> userManager, ClaimsPrincipal principal)
         {
             var currentUser = await userManager.GetUserAsync(principal);
@@ -68,7 +97,7 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
                                                     IEmailSender emailSender,
                                                     IConfiguration config)
         {
-            if (string.IsNullOrEmpty(request.Email)) 
+            if (string.IsNullOrEmpty(request.Email))
                 return Results.BadRequest((new { Message = "Email is required." }));
 
             //Find the user by email
@@ -97,10 +126,8 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
             return Results.Ok(new { Message = "If user exists a reset password link will be sent" });
 
         }
-      
-
         private static async Task<IResult> ResetPassword(ResetPasswordRequest request,
-                                                        UserManager<ApplicationUser> userManager)
+                                                UserManager<ApplicationUser> userManager)
         {
             //Check user inputs are valid
             if (string.IsNullOrEmpty(request.Email)
@@ -115,12 +142,12 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
             {
                 var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.ResetCode));
                 var result = await userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
-               
-                if(!result.Succeeded) 
+
+                if (!result.Succeeded)
                     return Results.BadRequest(new { Message = $"Password reset failed: {string.Join(", ", result.Errors.Select(e => e.Description))}" });
-                else               
+                else
                     return Results.Ok(new { Message = "Password reset successfully." });
-                
+
             }
             catch (FormatException)
             {
@@ -180,7 +207,6 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
             return Results.Ok(new { Message = $"User {user.Email} registered successfully. Password reset link sent to email." });
         }
 
-       
         #endregion
     }
 }
