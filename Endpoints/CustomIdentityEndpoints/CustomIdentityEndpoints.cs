@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Security.Claims;
 using System.Text;
 
 namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
@@ -33,10 +34,35 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
                  .Produces(StatusCodes.Status200OK)
                  .Produces(StatusCodes.Status400BadRequest);
 
+            group.MapGet("/manage/profile", GetProfileInfo)  // ("/route", handler method)
+                 .WithName("GetProfileInfo")
+                 .WithDescription("Get current user profile information")
+                 .WithSummary("Get user profile")
+                 .Produces(StatusCodes.Status200OK)
+                 .Produces(StatusCodes.Status404NotFound)
+                .RequireAuthorization();
+
 
             return route;
         }
+
         #region Handler Methods
+        // Handler methods for the custom identity info endpoint
+        private static async Task<IResult> GetProfileInfo(UserManager<ApplicationUser> userManager, ClaimsPrincipal principal)
+        {
+            var currentUser = await userManager.GetUserAsync(principal);
+            if (currentUser is null)
+                return Results.NotFound();//404 Not Found
+            var response = new UserProfileResponse
+            {
+                Id = currentUser.Id,
+                Email = currentUser.Email,
+                FirstName = currentUser.FirstName,
+                LastName = currentUser.LastName,
+                FullName = currentUser.FullName
+            };
+            return Results.Ok(response);
+        }
         private static async Task<IResult> ForgotPassword(ForgotPasswordRequest request,
                                                     UserManager<ApplicationUser> userManager,
                                                     IEmailSender emailSender,
@@ -72,7 +98,7 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
 
         }
       
-        // Handler methods for the custom identity info endpoint
+
         private static async Task<IResult> ResetPassword(ResetPasswordRequest request,
                                                         UserManager<ApplicationUser> userManager)
         {
