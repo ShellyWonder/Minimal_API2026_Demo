@@ -1,4 +1,4 @@
-﻿namespace MinimalAPI2026Demo.Models.Response
+﻿namespace MinimalAPI2026Demo.Models.Responses
 {
     public class WelcomeResponse
     {
