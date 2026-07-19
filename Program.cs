@@ -1,3 +1,4 @@
+
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,8 +20,10 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
 builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
+builder.Services.AddScoped<ISiteService, SiteService>();
 //enable validation
 builder.Services.AddValidation();
+
 
 var app = builder.Build();
 
@@ -45,5 +48,6 @@ var authRouteGroup = app.MapGroup("api/auth").WithTags("Admin");
 authRouteGroup.MapIdentityApi<ApplicationUser>();
 app.MapCustomIdentityEndpoints(); // Map the custom identity endpoints
 app.MapHomeEndpoints(); // Map the Home endpoints
+app.MapSiteEndpoints(); // Map the site endpoints
 app.Run();
 
