@@ -1,5 +1,4 @@
-﻿
-namespace MinimalAPI2026Demo.Endpoints.Sites
+﻿namespace MinimalAPI2026Demo.Endpoints.Sites
 {
     public static class SiteEndpoints
     {
@@ -9,11 +8,13 @@ namespace MinimalAPI2026Demo.Endpoints.Sites
                .AllowAnonymous()
                 .WithSummary("Public Site Endpoints.")
                 .WithDescription("Displays a list of all publically available site data")
-                .WithTags("Sites - Public");
+                .WithTags("Sites - Public")
+                .AddEndpointFilter<ExceptionHandlingFilter>();
 
             publicGroup.MapGet("", GetAllPublicSites)
                 .WithName(nameof(GetAllPublicSites))
                 .Produces<List<PublicSiteResponse>>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status500InternalServerError)
                 .WithSummary("Public Site Endpoints.")
                 .WithDescription("Returns a list of all publically available site data");
 

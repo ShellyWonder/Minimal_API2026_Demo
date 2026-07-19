@@ -4,6 +4,7 @@
     {
         public async Task<List<PublicSiteResponse>> GetAllSitesPublicAsync(CancellationToken ct)
         {
+           
             return await db.Sites
                            .AsNoTracking()
                            .Select(s => new PublicSiteResponse
