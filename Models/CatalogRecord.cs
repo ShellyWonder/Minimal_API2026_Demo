@@ -14,8 +14,8 @@
 
         [Required]
         public string Status { get; set; } = "Draft";
-        public DateTimeOffset DateSubmitted { get; set; } = DateTime.UtcNow;
-        public ICollection<CatalogNote> Notes { get; set; } = new List<CatalogNote>();
+        public DateTime DateSubmitted { get; set; } = DateTime.UtcNow;
+        public ICollection<CatalogNote> Notes { get; set; } = [];
 
 
     }

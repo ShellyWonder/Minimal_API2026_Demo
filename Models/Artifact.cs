@@ -8,7 +8,7 @@
         public string? Name { get; set; }
 
         [Required, MaxLength(500)]
-        public string? Catalog { get; set; }
+        public string? CatalogNumber { get; set; }
 
         [MaxLength(2500)]
         public string? Description { get; set; }
@@ -16,7 +16,7 @@
         [MaxLength(2500)]
         public string? PublicNarrative { get; set; }
 
-        public DateTimeOffset DateDiscovered { get; set; } = DateTimeOffset.UtcNow;
+        public DateTime DateDiscovered { get; set; } = DateTime.UtcNow;
 
         public string? Type { get; set; } //artifact type
 
@@ -26,7 +26,7 @@
         public Site? Site { get; set; } //Nav property
 
         //Nav properties 
-        public List<ArtifactMediaFile> MediaFiles { get; set; } = [new()];
-        public List<CatalogRecord> CatalogRecords { get; set; } = [new()];
+        public List<ArtifactMediaFile> MediaFiles { get; set; } = [];
+        public List<CatalogRecord> CatalogRecords { get; set; } = [];
     }
 }

@@ -1,3 +1,5 @@
+using System.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,6 +29,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+using (var scope = app.Services.CreateScope())
+{
+    await DataSeed.ManageDataAsync(scope.ServiceProvider);
 }
 
 app.UseHttpsRedirection();

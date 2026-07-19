@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinimalAPI2026Demo.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MinimalAPI2026Demo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260719014343_003")]
+    partial class _003
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -349,7 +352,7 @@ namespace MinimalAPI2026Demo.Migrations
                     b.Property<int>("ArtifactId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("DateSubmitted")
+                    b.Property<DateTimeOffset>("DateSubmitted")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
