@@ -6,5 +6,6 @@
         public Task<PublicSiteResponse?> GetPublicSiteByIdAsync(int id, CancellationToken ct);
         public Task<List<PrivateSiteResponse>> GetAllPrivateSitesAsync(CancellationToken ct);
         public Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int id, CancellationToken ct);
+        public Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct);
     }
 }

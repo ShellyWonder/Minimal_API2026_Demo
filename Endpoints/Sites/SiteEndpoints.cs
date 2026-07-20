@@ -58,6 +58,19 @@
                 .WithDescription("Returns auth-protected site data on a specific private site using the unique site id.");
             #endregion
 
+            #region Posts
+            privateGroup.MapPost("", CreateSite)
+               .WithName(nameof(CreateSite))
+               .Accepts<CreateSiteRequest>("Application/json")
+               .Produces<PrivateSiteResponse>(StatusCodes.Status201Created)
+               .ProducesValidationProblem()
+               .Produces(StatusCodes.Status401Unauthorized)
+               .Produces(StatusCodes.Status403Forbidden)
+               .Produces(StatusCodes.Status500InternalServerError)
+               .WithSummary("Create site by authorized user.")
+               .WithDescription("Returns a new site object created by an authorized user.");
+            #endregion
+
             return route;
         }
         #region Handlers
@@ -86,6 +99,16 @@
 
             return TypedResults.Ok(site);
         }
+        private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request, ISiteService service, CancellationToken ct)
+        {
+           
+            var createdSite = await service.CreateSiteAsync(request, ct);
+
+           
+            return TypedResults.Created($"/api/private/sites/{createdSite.Id}",createdSite);
+        }
+
+
         #endregion
     }
 }

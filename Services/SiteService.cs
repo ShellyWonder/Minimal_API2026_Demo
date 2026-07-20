@@ -61,7 +61,6 @@
                 .ToListAsync(ct);
         }
 
-
         public async Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int id, CancellationToken ct)
         {
             return await db.Sites
@@ -80,6 +79,36 @@
                     AeonNarrative = s.AeonNarrative
                 })
                 .FirstOrDefaultAsync(ct);
+        }
+
+        public async Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct)
+        {
+            var site = new Site
+            {
+                Name = request.Name,
+                Location = request.Location,
+                Coordinates = request.Coordinates,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude,
+                Description = request.Description,
+                PublicNarrative = request.PublicNarrative,
+                AeonNarrative = request.AeonNarrative
+            };
+            db.Sites.Add(site);
+            await db.SaveChangesAsync(ct);
+
+            return new PrivateSiteResponse
+            {
+                Id = site.Id,
+                Name = site.Name,
+                Location = site.Location,
+                Cooridinates = site.Coordinates,
+                Latitude = site.Latitude,
+                Longitude = site.Longitude,
+                Description = site.Description,
+                PublicNarrative = site.PublicNarrative,
+                AeonNarrative = site.AeonNarrative
+            };
         }
     }
 }
