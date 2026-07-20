@@ -69,6 +69,17 @@
                .Produces(StatusCodes.Status500InternalServerError)
                .WithSummary("Create site by authorized user.")
                .WithDescription("Returns a new site object created by an authorized user.");
+
+            privateGroup.MapPut("/{id:int}", UpdateSite)
+               .WithName(nameof(UpdateSite))
+               .Accepts<UpdateSiteRequest>("Application/json")
+               .Produces(StatusCodes.Status204NoContent)
+               .ProducesValidationProblem()
+               .Produces(StatusCodes.Status404NotFound)
+               .Produces(StatusCodes.Status401Unauthorized)
+               .Produces(StatusCodes.Status500InternalServerError)
+               .WithSummary("Update site by authorized user.")
+               .WithDescription("Updates an existing site executed by an authorized user.");
             #endregion
 
             return route;
@@ -79,7 +90,9 @@
             return TypedResults.Ok(await service.GetAllSitesPublicAsync(ct));
         }
 
-        private static async Task<Results<Ok<PublicSiteResponse>, NotFound>> GetPublicSiteById(int id, ISiteService service, CancellationToken ct)
+        private static async Task<Results<Ok<PublicSiteResponse>, NotFound>> GetPublicSiteById(int id, 
+                                                                             ISiteService service, 
+                                                                             CancellationToken ct)
         {
             var site = await service.GetPublicSiteByIdAsync(id, ct);
             if (site is null) return TypedResults.NotFound();
@@ -92,14 +105,18 @@
             return TypedResults.Ok(await service.GetAllPrivateSitesAsync(ct));
         }
 
-        private static async Task<Results<Ok<PrivateSiteResponse>, NotFound>> GetPrivateSiteById(int id, ISiteService service, CancellationToken ct)
+        private static async Task<Results<Ok<PrivateSiteResponse>, NotFound>> GetPrivateSiteById(int id, 
+                                                                               ISiteService service, 
+                                                                               CancellationToken ct)
         {
             var site = await service.GetPrivateSiteByIdAsync(id, ct);
             if (site is null) return TypedResults.NotFound();
 
             return TypedResults.Ok(site);
         }
-        private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request, ISiteService service, CancellationToken ct)
+        private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request, 
+                                                                                            ISiteService service, 
+                                                                                            CancellationToken ct)
         {
            
             var createdSite = await service.CreateSiteAsync(request, ct);
@@ -108,6 +125,15 @@
             return TypedResults.Created($"/api/private/sites/{createdSite.Id}",createdSite);
         }
 
+        private static async Task<Results<NoContent,NotFound, ValidationProblem>> UpdateSite(int id, 
+                                                                                  UpdateSiteRequest request, 
+                                                                                  ISiteService service, 
+                                                                                  CancellationToken ct)
+        { 
+            var success = await service.UpdateSiteAsync(id, request, ct);
+            return success ? TypedResults.NoContent() : TypedResults.NotFound();
+
+        }
 
         #endregion
     }

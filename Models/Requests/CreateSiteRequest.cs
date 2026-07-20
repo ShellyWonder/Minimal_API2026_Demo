@@ -1,5 +1,8 @@
 ﻿namespace MinimalAPI2026Demo.Models.Requests
 {
+    /// <summary>
+    /// UpdateSiteRequest.cs inherits from CreateSiteRequest.cs. Changes to this model will effect UpdateSiteRequest.cs
+    /// </summary>
     public class CreateSiteRequest
     {
         [Required, MaxLength(200)]

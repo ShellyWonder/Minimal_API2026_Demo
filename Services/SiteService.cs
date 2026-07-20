@@ -110,5 +110,25 @@
                 AeonNarrative = site.AeonNarrative
             };
         }
+
+        public async Task<bool> UpdateSiteAsync(int id, UpdateSiteRequest request, CancellationToken ct)
+        {
+            var site = await db.Sites.FindAsync(id, ct);
+            if (site is null) return false;
+
+            site.Name = request.Name;
+            site.Location = request.Location;
+            site.Coordinates = request.Coordinates;
+            site.Latitude = request.Latitude;
+            site.Longitude = request.Longitude;
+            site.Description = request.Description;
+            site.PublicNarrative = request.PublicNarrative;
+            site.AeonNarrative = request.AeonNarrative;
+
+            await db.SaveChangesAsync(ct);
+
+            return true;
+            
+        }
     }
 }
