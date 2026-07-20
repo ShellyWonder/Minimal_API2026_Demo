@@ -130,5 +130,16 @@
             return true;
             
         }
+
+        public async Task<bool> DeleteSiteAsync(int id, CancellationToken ct)
+        {
+            var site = await db.Sites.FindAsync(id, ct);
+            if (site is null) return false;
+
+            db.Sites.Remove(site);
+            await db.SaveChangesAsync(ct);
+
+            return true;
+        }
     }
 }

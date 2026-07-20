@@ -8,5 +8,6 @@
         public Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int id, CancellationToken ct);
         public Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct);
         public Task<bool> UpdateSiteAsync(int id, UpdateSiteRequest request, CancellationToken ct);
+        public Task<bool> DeleteSiteAsync(int id, CancellationToken ct);
     }
 }

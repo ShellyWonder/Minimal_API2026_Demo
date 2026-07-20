@@ -69,21 +69,38 @@
                .Produces(StatusCodes.Status500InternalServerError)
                .WithSummary("Create site by authorized user.")
                .WithDescription("Returns a new site object created by an authorized user.");
+            #endregion
 
+            #region Update/Puts
             privateGroup.MapPut("/{id:int}", UpdateSite)
                .WithName(nameof(UpdateSite))
                .Accepts<UpdateSiteRequest>("Application/json")
                .Produces(StatusCodes.Status204NoContent)
                .ProducesValidationProblem()
-               .Produces(StatusCodes.Status404NotFound)
                .Produces(StatusCodes.Status401Unauthorized)
+               .Produces(StatusCodes.Status404NotFound)
                .Produces(StatusCodes.Status500InternalServerError)
                .WithSummary("Update site by authorized user.")
-               .WithDescription("Updates an existing site executed by an authorized user.");
+               .WithDescription("Updates an existing site by Id if executed by an authorized user.");
             #endregion
+
+            #region Delete
+            privateGroup.MapDelete("/{id:int}", DeleteSite)
+               .WithName(nameof(DeleteSite))
+               .Produces(StatusCodes.Status204NoContent)
+               .ProducesValidationProblem()
+               .Produces(StatusCodes.Status401Unauthorized)
+               .Produces(StatusCodes.Status404NotFound)
+               .Produces(StatusCodes.Status500InternalServerError)
+               .WithSummary("Delete site.")
+               .WithDescription("Delete an existing site by Id if executed by an authorized user.");
+            #endregion
+
 
             return route;
         }
+
+       
         #region Handlers
         private static async Task<Ok<List<PublicSiteResponse>>> GetAllPublicSites(ISiteService service, CancellationToken ct)
         {
@@ -133,6 +150,14 @@
             var success = await service.UpdateSiteAsync(id, request, ct);
             return success ? TypedResults.NoContent() : TypedResults.NotFound();
 
+        }
+
+        private static async Task<Results<NoContent, NotFound, ValidationProblem>> DeleteSite(int id, 
+                                                                ISiteService service,
+                                                                CancellationToken ct)
+        {
+            var success =await service.DeleteSiteAsync(id, ct);
+            return success ? TypedResults.NoContent() :TypedResults.NotFound();
         }
 
         #endregion
