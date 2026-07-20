@@ -49,5 +49,6 @@ authRouteGroup.MapIdentityApi<ApplicationUser>();
 app.MapCustomIdentityEndpoints(); // Map the custom identity endpoints
 app.MapHomeEndpoints(); // Map the Home endpoints
 app.MapSiteEndpoints(); // Map the site endpoints
+app.MapArtifactMediaEndpoints(); //Map the Artifact Image endpoints
 app.Run();
 

@@ -1,0 +1,65 @@
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace MinimalAPI2026Demo.Endpoints.Artifacts
+{
+    public static class ArtifactMediaFileEndpoints
+    {
+        public static IEndpointRouteBuilder MapArtifactMediaEndpoints(this IEndpointRouteBuilder route)
+        {
+            #region Groups
+            var publicGroup = route.MapGroup("api/public/artifacts/images")
+                .AllowAnonymous()
+                .WithSummary("Public Artifact Media Files Endpoints.")
+                .WithDescription("Returns publically available media file data")
+                .WithTags("Artifact Media Files - Public")
+                .AddEndpointFilter<ExceptionHandlingFilter>();
+
+            var privateGroup = route.MapGroup("api/private/artifacts/images")
+                .RequireAuthorization()
+                .WithSummary("Private Artifact Media File Endpoints.")
+                .WithDescription("Returns private media file data requiring auth user")
+                .WithTags("Artifact Media Files - Private")
+                .AddEndpointFilter<ExceptionHandlingFilter>();
+            #endregion
+
+            #region Get Endpoints
+            publicGroup.MapGet("/{id:int}", GetPublicArtifactImage)
+                        .WithName(nameof(GetPublicArtifactImage))
+                        .Produces<FileContentHttpResult>(StatusCodes.Status200OK)
+                        .Produces(StatusCodes.Status404NotFound)
+                        .Produces(StatusCodes.Status500InternalServerError)
+                        .WithSummary("Get Artifact Image (Public)")
+                        .WithDescription("""
+                            Retrieves binary image data for a specific artifact media record.
+                            This endpoint does not require authentication.
+                            All unhandled exceptions are processed by the ExceptionHandlingFilter.
+                            """);
+            #endregion
+
+            #region Create Endpoints
+
+            #endregion
+
+            return route;
+        }
+
+        #region Handlers
+        private static async Task<Results<FileContentHttpResult, NotFound>> GetPublicArtifactImage(int id,
+                                                                                ApplicationDbContext db,
+                                                                                HttpResponse response,
+                                                                                CancellationToken ct)
+        {
+            var image = await db.MediaFiles
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync(m => m.Id == id, ct);
+            if (image == null || image.Data.Length == 0) return TypedResults.NotFound();
+
+            // Add client-side caching for performance
+            response.Headers.CacheControl = "public, max-age=86400"; // Cache for 1 day
+
+            return TypedResults.File(image.Data, image.ContentType);
+        }
+
+        #endregion
+    }
+}

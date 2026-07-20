@@ -12,10 +12,11 @@ global using MinimalAPI2026Demo.Services.Interfaces;
 
 global using MinimalAPI2026Demo.Models;
 global using MinimalAPI2026Demo.Filters;
+global using MinimalAPI2026Demo.Endpoints.Home;
 global using MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints;
 global using MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints.Models;
 global using MinimalAPI2026Demo.Endpoints.Sites;
+global using MinimalAPI2026Demo.Endpoints.Artifacts;
 global using MinimalAPI2026Demo.Extensions;
 global using MinimalAPI2026Demo.Models.Responses;
-global using MinimalAPI2026Demo.Endpoints.Home;
 global using MinimalAPI2026Demo.Models.Requests;
