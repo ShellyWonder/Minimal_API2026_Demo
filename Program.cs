@@ -21,6 +21,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
 builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
 //enable validation
 builder.Services.AddValidation();
 
