@@ -1,6 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace MinimalAPI2026Demo.Endpoints.Artifacts
+﻿namespace MinimalAPI2026Demo.Endpoints.Artifacts
 {
     public static class ArtifactMediaFileEndpoints
     {
@@ -10,7 +8,7 @@ namespace MinimalAPI2026Demo.Endpoints.Artifacts
             var publicGroup = route.MapGroup("api/public/artifacts/images")
                 .AllowAnonymous()
                 .WithSummary("Public Artifact Media Files Endpoints.")
-                .WithDescription("Returns publically available media file data")
+                .WithDescription("Returns publically available media file data.")
                 .WithTags("Artifact Media Files - Public")
                 .AddEndpointFilter<ExceptionHandlingFilter>();
 

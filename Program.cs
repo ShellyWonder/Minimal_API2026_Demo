@@ -21,6 +21,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
 builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IArtifactService , ArtifactService>();
 builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
 //enable validation
 builder.Services.AddValidation();
@@ -47,9 +48,10 @@ app.UseMiddleware<BlockIdentityEndpoints>();
 
 var authRouteGroup = app.MapGroup("api/auth").WithTags("Admin");
 authRouteGroup.MapIdentityApi<ApplicationUser>();
-app.MapCustomIdentityEndpoints(); // Map the custom identity endpoints
-app.MapHomeEndpoints(); // Map the Home endpoints
-app.MapSiteEndpoints(); // Map the site endpoints
-app.MapArtifactMediaEndpoints(); //Map the Artifact Image endpoints
+app.MapCustomIdentityEndpoints(); // Map custom identity endpoints
+app.MapHomeEndpoints(); // Map Home endpoints
+app.MapSiteEndpoints(); // Map Site endpoints
+app.MapArtifactEndpoints(); // Map Artifact endpoints
+app.MapArtifactMediaEndpoints(); //Map Artifact Image endpoints
 app.Run();
 
