@@ -37,6 +37,14 @@
                 .WithSummary("Get public site by id")
                 .WithDescription("Returns publically available site data on a specific site using the unique site id.");
 
+            publicGroup.MapGet("/{siteId:int}/artifacts",GetPublicArtifactsBySite)
+                .WithName(nameof(GetPublicArtifactsBySite))
+                .Produces<PublicArtifactResponse>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status500InternalServerError)
+                .WithSummary("Get All Public Artifacts by Site")
+                .WithDescription("Retrieves all public artifact summaries associated with a specific site.");
+
             //  Private endpoints for authorized users
             privateGroup.MapGet("", GetAllPrivateSites)
                 .WithName(nameof(GetAllPrivateSites))
@@ -130,6 +138,15 @@
             if (site is null) return TypedResults.NotFound();
 
             return TypedResults.Ok(site);
+        }
+        private static async Task<Results<Ok<List<PublicArtifactResponse>>, NotFound>> GetPublicArtifactsBySite(int siteId, 
+                                                                               IArtifactService service, 
+                                                                               CancellationToken ct)
+        {
+            var artifacts = await service.GetPublicArtifactsBySiteAsync(siteId, ct);
+            if (artifacts is null || artifacts.Count == 0) return TypedResults.NotFound();
+
+            return TypedResults.Ok(artifacts);
         }
         private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request, 
                                                                                             ISiteService service, 
