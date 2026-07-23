@@ -5,6 +5,7 @@
         #region Public Signatures
         public Task<List<PublicArtifactResponse>> GetAllPublicArtifactsAsync(CancellationToken ct);
         public Task<List<PublicArtifactResponse>?> GetPublicArtifactsBySiteAsync(int siteId, CancellationToken ct);
+        public Task<PublicArtifactResponse?> GetPublicArtifactByIdAsync(int Id, CancellationToken ct);
         #endregion
 
         #region Private Signatures
@@ -13,6 +14,8 @@
         public Task<List<PrivateArtifactResponse>?> GetPrivateArtifactsBySiteAsync(int siteId, CancellationToken ct);
 
         public Task<PrivateArtifactResponse?>CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct);
+
+        public Task<PrivateArtifactResponse?> GetPrivateArtifactByIdAsync(int Id, CancellationToken ct);
 
 
         #endregion

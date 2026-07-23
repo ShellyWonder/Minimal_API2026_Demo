@@ -38,6 +38,24 @@
            .Produces(StatusCodes.Status401Unauthorized)
            .Produces(StatusCodes.Status404NotFound)
            .Produces(StatusCodes.Status500InternalServerError);
+
+            publicGroup.MapGet("/{id:int}", GetPublicArtifactById)
+            .WithName(nameof(GetPublicArtifactById))
+                .WithSummary("Get artifact by id - Public Access")
+                .WithDescription("Returns publically available data on a specific artifact using the unique site id.")
+            .Produces<PublicArtifactResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+            privateGroup.MapGet("/{id:int}", GetPrivateArtifactById)
+            .WithName(nameof(GetPrivateArtifactById))
+            .WithSummary("Get artifact by id  - Authorized Access Only")
+            .WithDescription("Returns private data on a specific artifact using the unique site id. Authorization required")
+            .Produces<PrivateArtifactResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
             #endregion
 
             #region Create Endpoints
@@ -56,6 +74,27 @@
         }
 
         #region Handlers
+        private static async Task<Results<Ok<PrivateArtifactResponse>, NotFound>> GetPrivateArtifactById(int id, 
+                                                                                        IArtifactService service,
+                                                                                        CancellationToken ct)
+        {
+            var artifact =  await service.GetPrivateArtifactByIdAsync(id, ct);
+            if (artifact is null) return TypedResults.NotFound();
+
+            return TypedResults.Ok(artifact);
+
+        }
+
+        private static async Task<Results<Ok<PublicArtifactResponse>,NotFound>> GetPublicArtifactById(int id,
+                                                                                    IArtifactService service,
+                                                                                    CancellationToken ct)
+        {
+            var artifact = await service.GetPublicArtifactByIdAsync(id, ct);
+            if(artifact is null) return TypedResults.NotFound();
+
+            return TypedResults.Ok(artifact);
+        }
+
         private static async Task<Results<Created<PrivateArtifactResponse>,NotFound>> CreateArtifact(IArtifactService service,
                                                                                             CreateArtifactRequest request,
                                                                                             CancellationToken ct)

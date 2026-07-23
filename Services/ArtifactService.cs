@@ -75,7 +75,7 @@
                                CatalogNumber = a.CatalogNumber ?? string.Empty,
                                PublicNarrative = a.PublicNarrative ?? string.Empty,
                                DateDiscovered = a.DateDiscovered,
-                               Type = a.Type.ToString() ?? "unknown",
+                               Type = a.Type!.ToString() ?? "unknown",
                                SiteName = a.Site != null ? a.Site.Name! : string.Empty,
                                PrimaryImageUrl = a.MediaFiles
                                     .Where(m => m.IsPrimary)
@@ -106,7 +106,7 @@
                                PublicNarrative = a.PublicNarrative ?? string.Empty,
                                Description = a.Description ?? string.Empty,
                                DateDiscovered = a.DateDiscovered,
-                               Type = a.Type.ToString() ?? "unknown",
+                               Type = a.Type!.ToString() ?? "unknown",
                                SiteName = a.Site != null ? a.Site.Name! : string.Empty,
                                PrimaryImageUrl = a.MediaFiles
                                     .Where(m => m.IsPrimary)
@@ -160,6 +160,54 @@
                 SiteName = site.Name ?? string.Empty,
                 PrimaryImageUrl = ""
             };
+        }
+
+        public async Task<PublicArtifactResponse?> GetPublicArtifactByIdAsync(int Id, CancellationToken ct)
+        {
+            return await db.Artifacts
+                           .AsNoTracking()
+                           .Where(a => a.Id == Id)
+                           .Include(a => a.Site)
+                           .Include(a => a.MediaFiles)
+                           .Select(a => new PublicArtifactResponse
+                           {
+                               Id = a.Id,
+                               Name = a.Name,
+                               CatalogNumber = a.CatalogNumber ?? string.Empty,
+                               PublicNarrative = a.PublicNarrative ?? string.Empty,
+                               DateDiscovered = a.DateDiscovered,
+                               Type = a.Type!.ToString() ?? "unknown",
+                               SiteName = a.Site != null ? a.Site.Name! : "unknown",
+                               PrimaryImageUrl = a.MediaFiles
+                                    .Where(m => m.IsPrimary)
+                                    .Select(m => $"/api/public/artifacts/images/{m.Id}")
+                                    .FirstOrDefault()
+                           }) 
+                           .FirstOrDefaultAsync(ct);
+        }
+
+        public async Task<PrivateArtifactResponse?> GetPrivateArtifactByIdAsync(int Id, CancellationToken ct)
+        {
+             return await db.Artifacts
+                           .AsNoTracking()
+                           .Where(a => a.Id == Id)
+                           .Include(a => a.Site)
+                           .Include(a => a.MediaFiles)
+                           .Select(a => new PrivateArtifactResponse
+                           {
+                               Id = a.Id,
+                               Name = a.Name,
+                               CatalogNumber = a.CatalogNumber ?? string.Empty,
+                               PublicNarrative = a.PublicNarrative ?? string.Empty,
+                               DateDiscovered = a.DateDiscovered,
+                               Type = a.Type!.ToString() ?? "unknown",
+                               SiteName = a.Site != null ? a.Site.Name! : "unknown",
+                               PrimaryImageUrl = a.MediaFiles
+                                    .Where(m => m.IsPrimary)
+                                    .Select(m => $"/api/private/artifacts/images/{m.Id}")
+                                    .FirstOrDefault()
+                           })
+                           .FirstOrDefaultAsync(ct);
         }
         #endregion
     }
