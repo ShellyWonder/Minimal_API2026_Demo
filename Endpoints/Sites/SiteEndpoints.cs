@@ -168,9 +168,6 @@
         }
 
 
-
-
-
         private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request, 
                                                                                             ISiteService service, 
                                                                                             CancellationToken ct)
