@@ -12,6 +12,8 @@
 
         public Task<List<PrivateArtifactResponse>?> GetPrivateArtifactsBySiteAsync(int siteId, CancellationToken ct);
 
+        public Task<PrivateArtifactResponse?>CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct);
+
 
         #endregion
     }
