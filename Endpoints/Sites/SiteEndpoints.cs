@@ -64,6 +64,16 @@
                 .Produces(StatusCodes.Status500InternalServerError)
                 .WithSummary("Get auth-protected site by id")
                 .WithDescription("Returns auth-protected site data on a specific private site using the unique site id.");
+
+            privateGroup.MapGet("/{siteId:int}/artifacts", GetPrivateArtifactsBySite)
+               .WithName(nameof(GetPrivateArtifactsBySite))
+               .Produces<PrivateArtifactResponse>(StatusCodes.Status200OK)
+               .Produces(StatusCodes.Status401Unauthorized)
+               .Produces(StatusCodes.Status404NotFound)
+               .Produces(StatusCodes.Status500InternalServerError)
+               .WithSummary("Get Private Artifacts by Site(with authorization.)")
+               .WithDescription("Retrieves all private artifact summaries associated with a specific site.");
+
             #endregion
 
             #region Posts
@@ -108,7 +118,6 @@
             return route;
         }
 
-       
         #region Handlers
         private static async Task<Ok<List<PublicSiteResponse>>> GetAllPublicSites(ISiteService service, CancellationToken ct)
         {
@@ -140,14 +149,28 @@
             return TypedResults.Ok(site);
         }
         private static async Task<Results<Ok<List<PublicArtifactResponse>>, NotFound>> GetPublicArtifactsBySite(int siteId, 
-                                                                               IArtifactService service, 
-                                                                               CancellationToken ct)
+                                                                                                                IArtifactService service, 
+                                                                                                                CancellationToken ct)
         {
             var artifacts = await service.GetPublicArtifactsBySiteAsync(siteId, ct);
             if (artifacts is null || artifacts.Count == 0) return TypedResults.NotFound();
 
             return TypedResults.Ok(artifacts);
         }
+
+        private static async Task<Results<Ok<List<PrivateArtifactResponse>>, NotFound>> GetPrivateArtifactsBySite(int siteId,
+                                                                                                                  IArtifactService service,
+                                                                                                                  CancellationToken ct)
+        {
+            var artifacts = await service.GetPrivateArtifactsBySiteAsync(siteId, ct);
+            if(artifacts is null || artifacts.Count == 0) return TypedResults.NotFound();
+            return TypedResults.Ok(artifacts);
+        }
+
+
+
+
+
         private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request, 
                                                                                             ISiteService service, 
                                                                                             CancellationToken ct)

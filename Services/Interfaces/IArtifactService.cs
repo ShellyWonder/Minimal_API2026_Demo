@@ -10,6 +10,9 @@
         #region Private Signatures
         public Task<List<PrivateArtifactResponse>> GetAllPrivateArtifactsAsync(CancellationToken ct);
 
+        public Task<List<PrivateArtifactResponse>?> GetPrivateArtifactsBySiteAsync(int siteId, CancellationToken ct);
+
+
         #endregion
     }
 }
