@@ -11,6 +11,7 @@ global using MinimalAPI2026Demo.Services;
 global using MinimalAPI2026Demo.Services.Interfaces;
 
 global using MinimalAPI2026Demo.Models;
+global using MinimalAPI2026Demo.Enums;
 global using MinimalAPI2026Demo.Filters;
 global using MinimalAPI2026Demo.Endpoints.Home;
 global using MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints;

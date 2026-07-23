@@ -79,6 +79,9 @@ namespace MinimalAPI2026Demo.Extensions
                         }
                         return true;
                     });
+
+                    c.UseInlineDefinitionsForEnums();
+                    c.SchemaFilter<EnumStringSchemaFilter>(); // Adds enum values to Type description
                 });
             return services;
         }
