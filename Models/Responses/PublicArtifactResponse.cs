@@ -7,7 +7,7 @@
         public string Name { get; set; } = string.Empty;
         public string CatalogNumber { get; set; } = string.Empty;
         public string PublicNarrative { get; set; } = string.Empty;
-        public DateTime DateDiscovered { get; set; }
+        public DateTime DateDiscovered { get; set; } = DateTime.UtcNow;
         public string Type { get; set; } = string.Empty;
 
         public string SiteName { get; set; } = string.Empty;

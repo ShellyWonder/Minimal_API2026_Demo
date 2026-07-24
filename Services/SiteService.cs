@@ -2,7 +2,7 @@
 {
     public class SiteService(ApplicationDbContext db) : ISiteService
     {
-
+        #region Get <List> Sites
         public async Task<List<PublicSiteResponse>> GetAllSitesPublicAsync(CancellationToken ct)
         {
 
@@ -22,6 +22,28 @@
                            .ToListAsync(ct);
         }
 
+        public async Task<List<PrivateSiteResponse>> GetAllPrivateSitesAsync(CancellationToken ct)
+        {
+            return await db.Sites
+                .AsNoTracking()
+                .Select(s => new PrivateSiteResponse
+                {
+                    Id = s.Id,
+                    Name = s.Name!,
+                    Location = s.Location,
+                    Cooridinates = s.Coordinates,
+                    Latitude = s.Latitude,
+                    Longitude = s.Longitude,
+                    Description = s.Description,
+                    PublicNarrative = s.PublicNarrative,
+                    AeonNarrative = s.AeonNarrative
+                })
+
+                .ToListAsync(ct);
+        }
+        #endregion
+
+        #region Get Site by Id
         public async Task<PublicSiteResponse?> GetPublicSiteByIdAsync(int id, CancellationToken ct)
         {
             return await db.Sites
@@ -41,25 +63,6 @@
                            .FirstOrDefaultAsync(ct);
         }
 
-        public async Task<List<PrivateSiteResponse>> GetAllPrivateSitesAsync(CancellationToken ct)
-        {
-            return await db.Sites
-                .AsNoTracking()
-                .Select(s => new PrivateSiteResponse
-                {
-                    Id = s.Id,
-                    Name = s.Name!,
-                    Location = s.Location,
-                    Cooridinates = s.Coordinates,
-                    Latitude = s.Latitude,
-                    Longitude = s.Longitude,
-                    Description = s.Description,
-                    PublicNarrative = s.PublicNarrative,
-                    AeonNarrative = s.AeonNarrative
-                })
-                
-                .ToListAsync(ct);
-        }
 
         public async Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int id, CancellationToken ct)
         {
@@ -80,7 +83,9 @@
                 })
                 .FirstOrDefaultAsync(ct);
         }
+        #endregion
 
+        #region Create | Update | Delete
         public async Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct)
         {
             var site = new Site
@@ -128,7 +133,7 @@
             await db.SaveChangesAsync(ct);
 
             return true;
-            
+
         }
 
         public async Task<bool> DeleteSiteAsync(int id, CancellationToken ct)
@@ -141,5 +146,6 @@
 
             return true;
         }
+        #endregion
     }
 }

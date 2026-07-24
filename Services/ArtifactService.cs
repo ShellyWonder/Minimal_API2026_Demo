@@ -118,50 +118,6 @@
                            }).ToListAsync(ct);
         }
 
-        public async Task<PrivateArtifactResponse?> CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct)
-        {
-            //validate site 
-            var site = await db.Sites.FindAsync(request.SiteId,ct);
-            if(site == null) return null;// response 404NotFound
-
-            // Validate the artifact type string
-            if (!Enum.TryParse<ArtifactType>(request.Type, true, out var artifactType))
-            {
-                throw new ArgumentException($"Invalid artifact type '{request.Type}'. " +
-                    $"Allowed values are: {string.Join(", ", Enum.GetNames(typeof(ArtifactType)))}");
-            }
-
-            //Create new artifact
-            var artifact = new Artifact
-            {
-                Name = request.Name,
-                CatalogNumber = request.CatalogNumber ?? string.Empty,
-                Description = request.Description ?? string.Empty,
-                PublicNarrative = request.PublicNarrative ?? string.Empty,
-                DateDiscovered = request.DateDiscovered,
-                Type = artifactType.ToString() ?? "unknown",
-                SiteId = request.SiteId
-            };
-
-            db.Artifacts.Add(artifact);
-            await db.SaveChangesAsync(ct);
-            
-            // return DTO
-            return new PrivateArtifactResponse
-            {
-                Id = artifact.Id,
-                Name = artifact.Name,
-                CatalogNumber = artifact.CatalogNumber,
-                Description = artifact.Description,
-                PublicNarrative = artifact.PublicNarrative,
-                DateDiscovered = artifact.DateDiscovered,
-                Type = artifact.Type.ToString(),
-                SiteId = artifact.SiteId,
-                SiteName = site.Name ?? string.Empty,
-                PrimaryImageUrl = ""
-            };
-        }
-
         public async Task<PublicArtifactResponse?> GetPublicArtifactByIdAsync(int Id, CancellationToken ct)
         {
             return await db.Artifacts
@@ -209,6 +165,83 @@
                            })
                            .FirstOrDefaultAsync(ct);
         }
+
+        #endregion
+
+        #region Create | Update | Delete
+        public async Task<PrivateArtifactResponse?> CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct)
+        {
+            //validate site 
+            var site = await db.Sites.FindAsync(request.SiteId, ct);
+            if (site == null) return null;// response 404NotFound
+
+            // Validate the artifact type string
+            if (!Enum.TryParse<ArtifactType>(request.Type, true, out var artifactType))
+            {
+                throw new ArgumentException($"Invalid artifact type '{request.Type}'. " +
+                    $"Allowed values are: {string.Join(", ", Enum.GetNames(typeof(ArtifactType)))}");
+            }
+
+            //Create new artifact
+            var artifact = new Artifact
+            {
+                Name = request.Name,
+                CatalogNumber = request.CatalogNumber ?? string.Empty,
+                Description = request.Description ?? string.Empty,
+                PublicNarrative = request.PublicNarrative ?? string.Empty,
+                DateDiscovered = request.DateDiscovered,
+                Type = artifactType.ToString() ?? "unknown",
+                SiteId = request.SiteId
+            };
+
+            db.Artifacts.Add(artifact);
+            await db.SaveChangesAsync(ct);
+
+            // return DTO
+            return new PrivateArtifactResponse
+            {
+                Id = artifact.Id,
+                Name = artifact.Name,
+                CatalogNumber = artifact.CatalogNumber,
+                Description = artifact.Description,
+                PublicNarrative = artifact.PublicNarrative,
+                DateDiscovered = artifact.DateDiscovered,
+                Type = artifact.Type.ToString(),
+                SiteId = artifact.SiteId,
+                SiteName = site.Name ?? string.Empty,
+                PrimaryImageUrl = ""
+            };
+        }
+
+        public async Task<bool>UpdateArtifactAsync(int artifactId, UpdateArtifactRequest request, CancellationToken ct)
+        {
+            //Check site exists
+            var siteExists = await db.Sites
+                                     .AsNoTracking()
+                                     .AnyAsync(s => s.Id == request.SiteId);
+            if (!siteExists) return false;
+
+            //Check artifact exists
+            var artifact = await db.Artifacts.FindAsync(artifactId, ct);
+            if (artifact == null) return false;
+
+            //check enum is valid
+            if (!Enum.TryParse<ArtifactType>(request.Type, true, out var artifactType)) 
+                            throw new ArgumentException("Invalid artifact type");
+
+            artifact.Name = request.Name;
+            artifact.CatalogNumber = request.CatalogNumber ?? string.Empty;
+            artifact.Description = request.Description ?? string.Empty;
+            artifact.PublicNarrative = request.PublicNarrative ?? string.Empty;
+            artifact.DateDiscovered = request.DateDiscovered;
+            artifact.SiteId = request.SiteId;
+            artifact.Type = request.Type?.ToString() ?? string.Empty;
+
+            await db.SaveChangesAsync(ct);
+
+            return true;
+        }
+
         #endregion
     }
 }

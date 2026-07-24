@@ -41,8 +41,8 @@
 
             publicGroup.MapGet("/{id:int}", GetPublicArtifactById)
             .WithName(nameof(GetPublicArtifactById))
-                .WithSummary("Get artifact by id - Public Access")
-                .WithDescription("Returns publically available data on a specific artifact using the unique site id.")
+            .WithSummary("Get artifact by id - Public Access")
+            .WithDescription("Returns publically available data on a specific artifact using the unique site id.")
             .Produces<PublicArtifactResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
@@ -60,20 +60,47 @@
 
             #region Create Endpoints
             privateGroup.MapPost("", CreateArtifact)
-                .WithName(nameof(CreateArtifact))
-                .WithSummary("Create new artifact record - authorization required")
-                .WithDescription("Creates a new artifact with private data.")
-                .Produces(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status401Unauthorized)
-                .Produces(StatusCodes.Status404NotFound)
-                .Produces(StatusCodes.Status500InternalServerError);
+            .WithName(nameof(CreateArtifact))
+            .WithSummary("Create new artifact record - authorization required")
+            .WithDescription("Creates a new artifact with private data.")
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
             #endregion
 
+            #region Update Endpoints
+            privateGroup.MapPut("/{id:int}", UpdateArtifact)
+            .WithName(nameof(UpdateArtifact))
+            .WithSummary("Update an existing artifact record - authorization required")
+            .WithDescription("Update an existing artifact with private data.")
+            .Accepts<UpdateArtifactRequest>("Application/json")
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesValidationProblem()
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+            #endregion
+
+            #region Delete Endpoints
+            //privateGroup.MapDelete("/{id:int}", DeleteArtifact)
+            //.WithName(nameof(DeleteArtifact))
+            //.WithSummary("Create new artifact record - authorization required")
+            //.WithDescription("Creates a new artifact with private data.")
+            //.Accepts<UpdateSiteRequest>("Application/json")
+            //.Produces(StatusCodes.Status204NoContent)
+            // .ProducesValidationProblem()
+            //.Produces(StatusCodes.Status401Unauthorized)
+            //.Produces(StatusCodes.Status404NotFound)
+            //.Produces(StatusCodes.Status500InternalServerError);
+            #endregion
             return route;
 
         }
 
         #region Handlers
+
+        #region Get Artifact by Id
         private static async Task<Results<Ok<PrivateArtifactResponse>, NotFound>> GetPrivateArtifactById(int id, 
                                                                                         IArtifactService service,
                                                                                         CancellationToken ct)
@@ -94,16 +121,9 @@
 
             return TypedResults.Ok(artifact);
         }
+        #endregion
 
-        private static async Task<Results<Created<PrivateArtifactResponse>,NotFound>> CreateArtifact(IArtifactService service,
-                                                                                            CreateArtifactRequest request,
-                                                                                            CancellationToken ct)
-        {
-            var created = await service.CreateArtifactAsync(request, ct);
-            if (created is null) return TypedResults.NotFound();
-
-            return TypedResults.Created($"/api/private/artifacts/{created.Id}", created);
-        }
+        #region Get Artifact <List>
         private static async Task<Results<Ok<List<PublicArtifactResponse>>,NotFound>> GetPublicArtifacts(IArtifactService service,
                                                                                        CancellationToken ct)
         {
@@ -122,6 +142,36 @@
 
             return TypedResults.Ok(artifacts);
         }
+        #endregion
+
+        #region Create | Update | Delete
+
+        private static async Task<Results<Created<PrivateArtifactResponse>,NotFound>> CreateArtifact(IArtifactService service,
+                                                                                            CreateArtifactRequest request,
+                                                                                            CancellationToken ct)
+        {
+            var created = await service.CreateArtifactAsync(request, ct);
+            if (created is null) return TypedResults.NotFound();
+
+            return TypedResults.Created($"/api/private/artifacts/{created.Id}", created);
+        }
+
+        private static async Task<Results<NoContent, NotFound, ValidationProblem>> UpdateArtifact( int id, 
+                                                                                  UpdateArtifactRequest request,
+                                                                                  IArtifactService service,
+                                                                                  CancellationToken ct)
+        {
+            var success = await service.UpdateArtifactAsync(id, request, ct);
+            return success ? TypedResults.NoContent() : TypedResults.NotFound();
+        }
+
+        private static async Task DeleteArtifact(HttpContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         #endregion
 
     }
