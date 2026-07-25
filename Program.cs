@@ -23,6 +23,7 @@ builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IArtifactService , ArtifactService>();
 builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
+builder.Services.AddScoped<ICatalogRecordsService, CatalogRecordsService>();
 //enable validation
 builder.Services.AddValidation();
 
@@ -53,5 +54,6 @@ app.MapHomeEndpoints(); // Map Home endpoints
 app.MapSiteEndpoints(); // Map Site endpoints
 app.MapArtifactEndpoints(); // Map Artifact endpoints
 app.MapArtifactMediaEndpoints(); //Map Artifact Image endpoints
+app.MapCatalogRecordsEndpoints(); // Map Catalog Record endpoints
 app.Run();
 
