@@ -242,6 +242,17 @@
             return true;
         }
 
+        public async Task<bool> DeleteArtifactAsync(int id, CancellationToken ct)
+        {
+            var artifact = await db.Artifacts.FindAsync([id], ct);
+            if(artifact is null) return false;
+
+            db.Artifacts.Remove(artifact);
+            await db.SaveChangesAsync(ct);
+
+            return true;
+        }
+
         #endregion
     }
 }

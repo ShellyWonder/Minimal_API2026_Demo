@@ -10,17 +10,15 @@
 
         #region Private Signatures
         public Task<List<PrivateArtifactResponse>> GetAllPrivateArtifactsAsync(CancellationToken ct);
-
         public Task<List<PrivateArtifactResponse>?> GetPrivateArtifactsBySiteAsync(int siteId, CancellationToken ct);
-
-        public Task<PrivateArtifactResponse?>CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct);
-
-        public Task<bool> UpdateArtifactAsync(int artifactId, UpdateArtifactRequest request, CancellationToken ct);
-
-
         public Task<PrivateArtifactResponse?> GetPrivateArtifactByIdAsync(int Id, CancellationToken ct);
 
+        #region Create | Update | Delete
+        public Task<PrivateArtifactResponse?> CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct);
+        public Task<bool> UpdateArtifactAsync(int artifactId, UpdateArtifactRequest request, CancellationToken ct);
+        public Task<bool> DeleteArtifactAsync(int id, CancellationToken ct);
 
+        #endregion
         #endregion
     }
 }

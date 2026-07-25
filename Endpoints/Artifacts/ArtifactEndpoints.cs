@@ -83,21 +83,18 @@
             #endregion
 
             #region Delete Endpoints
-            //privateGroup.MapDelete("/{id:int}", DeleteArtifact)
-            //.WithName(nameof(DeleteArtifact))
-            //.WithSummary("Create new artifact record - authorization required")
-            //.WithDescription("Creates a new artifact with private data.")
-            //.Accepts<UpdateSiteRequest>("Application/json")
-            //.Produces(StatusCodes.Status204NoContent)
-            // .ProducesValidationProblem()
-            //.Produces(StatusCodes.Status401Unauthorized)
-            //.Produces(StatusCodes.Status404NotFound)
-            //.Produces(StatusCodes.Status500InternalServerError);
+            privateGroup.MapDelete("/{id:int}", DeleteArtifact)
+            .WithName(nameof(DeleteArtifact))
+            .WithSummary("Delete artifact record by ID - authorization required")
+            .WithDescription("Permanently deletes an artifact record by its ID.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
             #endregion
+
             return route;
-
         }
-
         #region Handlers
 
         #region Get Artifact by Id
@@ -165,9 +162,14 @@
             return success ? TypedResults.NoContent() : TypedResults.NotFound();
         }
 
-        private static async Task DeleteArtifact(HttpContext context)
+        private static async Task<Results<NoContent, NotFound>>DeleteArtifact(int id,
+                                                  IArtifactService service,
+                                                  CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var deleted = await service.DeleteArtifactAsync(id, ct);
+            if(!deleted) return TypedResults.NotFound();
+
+            return TypedResults.NoContent();
         }
 
         #endregion
