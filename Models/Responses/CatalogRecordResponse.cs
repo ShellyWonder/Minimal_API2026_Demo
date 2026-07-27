@@ -9,7 +9,7 @@
         
         
         public string SubmittedBy { get; set; } = string.Empty;
-        public string? VerifiedBy { get; set; }
+        public string? VerifiedBy { get; set; } 
 
         [Required]
         public string Status { get; set; } = "Draft";

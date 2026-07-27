@@ -6,7 +6,7 @@
         #region Get
         public Task<List<CatalogRecordResponse>>GetAllPrivateCatRecordsAsync(CancellationToken ct);
         public Task<List<CatalogRecordResponse>>GetAllPrivateCatRecordsByArtifactIdAsync(int artifactId,CancellationToken ct);
-        public Task<CatalogRecordResponse> GetPrivateCatalogRecordByIdAsync(int id, CancellationToken ct);
+        public Task<CatalogRecordResponse?> GetCatalogRecordByIdAsync(int id, CancellationToken ct);
 
         #region Create | Update | Delete
         public Task<CatalogRecordResponse?>CreateCatalogRecordAsync(CreateCatalogRequest request, CancellationToken ct);

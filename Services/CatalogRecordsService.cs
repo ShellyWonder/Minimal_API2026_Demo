@@ -31,7 +31,8 @@
                                DateSubmitted = cr.DateSubmitted,
                                SubmittedBy = $"{cr.SubmittedBy.FirstName} {cr.SubmittedBy.LastName}",
                                VerifiedBy = cr.VerifiedBy != null
-                               ? $"{cr.VerifiedBy.FirstName} {cr.VerifiedBy.LastName}" : null,
+                                                        ? $"{cr.VerifiedBy.FirstName} {cr.VerifiedBy.LastName}"
+                                                        : null,
                                Notes = cr.Notes.Select(n => new CatalogNoteResponse
                                {
                                    Id = n.Id,
@@ -39,16 +40,42 @@
                                    Created = n.Created,
                                    Author = $"{n.Author.FirstName} {n.Author.LastName}"
 
-
                                }).ToList()
 
                            }).ToListAsync(ct);
         }
 
-
-        public Task<CatalogRecordResponse> GetPrivateCatalogRecordByIdAsync(int id, CancellationToken ct)
+        public async Task<CatalogRecordResponse?> GetCatalogRecordByIdAsync(int id, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var recordExists = await db.CatalogRecords.AnyAsync(cr => cr.Id == id);
+            if (!recordExists) return null!;
+
+            return await db.CatalogRecords
+                           .AsNoTracking()
+                           .Where(cr => cr.Id == id)
+                           .Include(cr => cr.VerifiedBy)
+                           .Include(cr => cr.SubmittedBy)
+                           .Include(cr => cr.Notes)
+                             .ThenInclude(n => n.Author)
+                           .Select(cr => new CatalogRecordResponse
+                           {
+                               Id = cr.Id,
+                               ArtifactId = cr.ArtifactId,
+                               Status = cr.Status,
+                               DateSubmitted = cr.DateSubmitted,
+                               SubmittedBy = $"{cr.SubmittedBy.FirstName} {cr.SubmittedBy.LastName}" ?? string.Empty,
+                               VerifiedBy = cr.VerifiedBy != null
+                                                        ? $"{cr.VerifiedBy.FirstName} {cr.VerifiedBy.LastName}"
+                                                        : null,
+                               Notes = cr.Notes.Select(n => new CatalogNoteResponse
+                               {
+                                   Id = n.Id,
+                                   Content = n.Content,
+                                   Created = n.Created,
+                                   Author = $"{n.Author.FirstName} {n.Author.LastName}"
+                               
+                               }).ToList()
+                           }).FirstOrDefaultAsync(ct);
         }
 
 
