@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Security.Claims;
 using System.Text;
 
 namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints

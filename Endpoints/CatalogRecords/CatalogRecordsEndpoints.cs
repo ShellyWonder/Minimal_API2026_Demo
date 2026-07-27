@@ -5,7 +5,7 @@
         public static IEndpointRouteBuilder MapCatalogRecordsEndpoints(this IEndpointRouteBuilder route)
         {
             #region Groups
-            
+
             var privateGroup = route.MapGroup("api/private/catalogrecords")
                 .RequireAuthorization()
                 .WithTags("Catalog Records - Private")
@@ -26,21 +26,29 @@
 
             privateGroup.MapGet("/cr{id:int}", GetCatRecordById)
             .WithName(nameof(GetCatRecordById))
-            .WithSummary("Retrieves a single catalog record by its database ID - Authorized Access Only")
+            .WithSummary("Retrieve a single catalog record by its database ID - Authorized Access Only")
             .WithDescription("Returns private data on a specific artifact using the unique site id. Authorization required")
             .Produces<CatalogRecordResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
-
             #endregion
 
             #region Create | Update | Delete
+            privateGroup.MapPost("", CreateCatalogRecord)
+            .WithName(nameof(CreateCatalogRecord))
+            .WithDescription("Creates a single catalog record associated with an artifact ID - Authorized Access Only")
+            .WithSummary("Create a single catalog record - Authorization required")
+            .Produces<CatalogRecordResponse>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status500InternalServerError);
 
             #endregion
 
             return route;
         }
+
 
         #region Handlers
 
@@ -69,6 +77,21 @@
         #endregion
 
         #region Create | Update | Delete
+        private static async Task<Results<Created<CatalogRecordResponse>, BadRequest>> CreateCatalogRecord(ClaimsPrincipal user,
+                                                                                                    CreateCatalogRecordRequest request,
+                                                                                                    ICatalogRecordsService service,
+                                                                                                    CancellationToken ct)
+        {
+            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(string.IsNullOrEmpty(userId)) return TypedResults.BadRequest();
+
+            var created = await service.CreateCatalogRecordAsync(userId, request, ct);
+            if (created is null) return TypedResults.BadRequest();
+
+            return TypedResults.Created($"/api/private/catalogrecord/{created.Id}", created);
+
+        }
+
 
         #endregion
 

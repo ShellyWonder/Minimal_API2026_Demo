@@ -73,7 +73,7 @@
                                    Content = n.Content,
                                    Created = n.Created,
                                    Author = $"{n.Author.FirstName} {n.Author.LastName}"
-                               
+
                                }).ToList()
                            }).FirstOrDefaultAsync(ct);
         }
@@ -83,9 +83,42 @@
 
         #region Create | Update | Delete
 
-        public Task<CatalogRecordResponse?> CreateCatalogRecordAsync(CreateCatalogRequest request, CancellationToken ct)
+        public async Task<CatalogRecordResponse?> CreateCatalogRecordAsync(string userId,
+                                                                            CreateCatalogRecordRequest request,
+                                                                            CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var artifact = await db.Artifacts
+               .AsNoTracking()
+               .FirstOrDefaultAsync(a => a.Id == request.ArtifactId, ct);
+            if (artifact is null) return null; //response BadRequest
+
+            var record = new CatalogRecord
+            {
+                ArtifactId = request.ArtifactId,
+                Status = request.Status,
+                SubmittedById = userId,
+                DateSubmitted = DateTime.UtcNow,
+            };
+            db.CatalogRecords.Add(record);
+            await db.SaveChangesAsync(ct);
+
+            //Re-load with nav properties
+            var created = await db.CatalogRecords
+            .AsNoTracking()
+            .Include(r => r.SubmittedBy)
+            .FirstAsync(r => r.Id == record.Id, ct);
+
+            //return DTO
+            return new CatalogRecordResponse
+            {
+                Id = created.Id,
+                ArtifactId = created.ArtifactId,
+                Status = created.Status,
+                DateSubmitted = created.DateSubmitted,
+                SubmittedBy = $"{created.SubmittedBy.FirstName} {created.SubmittedBy.LastName}",
+                VerifiedBy = null,
+                Notes = new List<CatalogNoteResponse>()
+            };
         }
 
         public Task<bool> UpdateCatalogRecordAsync(int recordId, UpdateCatalogRecordRequest request, CancellationToken ct)

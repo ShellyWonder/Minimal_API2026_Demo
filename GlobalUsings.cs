@@ -1,5 +1,6 @@
 ﻿global using System.ComponentModel.DataAnnotations; 
 global using System.Text.Json.Serialization;
+global using System.Security.Claims;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
