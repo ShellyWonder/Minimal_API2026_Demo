@@ -44,12 +44,23 @@
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
 
+            privateGroup.MapPut("/{id:int}", UpdateCatalogRecord)
+            .WithName(nameof(UpdateCatalogRecord))
+            .WithDescription("Updates a single catalog record associated with an artifact ID - Authorized Access Only")
+            .WithSummary("Update a single catalog record - Authorization required")
+            .Accepts<UpdateCatalogRecordRequest>("Application/json")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+            
             #endregion
 
             return route;
         }
 
-
+        
         #region Handlers
 
         #region Get Record by Record Id
@@ -83,13 +94,24 @@
                                                                                                     CancellationToken ct)
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(string.IsNullOrEmpty(userId)) return TypedResults.BadRequest();
+            if (string.IsNullOrEmpty(userId)) return TypedResults.BadRequest();
 
             var created = await service.CreateCatalogRecordAsync(userId, request, ct);
             if (created is null) return TypedResults.BadRequest();
 
             return TypedResults.Created($"/api/private/catalogrecord/{created.Id}", created);
 
+        }
+
+        private static async Task<Results<NoContent, NotFound>> UpdateCatalogRecord(int id,
+                                                                                   UpdateCatalogRecordRequest request,
+                                                                                   ICatalogRecordsService service,
+                                                                                   CancellationToken ct)
+        {
+            var success = await service.UpdateCatalogRecordAsync(id, request, ct);
+
+            if (!success) return TypedResults.NotFound();
+                    return TypedResults.NoContent();
         }
 
 

@@ -10,7 +10,7 @@
 
         #region Create | Update | Delete
         public Task<CatalogRecordResponse?>CreateCatalogRecordAsync(string userId,CreateCatalogRecordRequest request, CancellationToken ct);
-        public Task<bool>UpdateCatalogRecordAsync(int recordId,UpdateCatalogRecordRequest request, CancellationToken ct);
+        public Task<bool>UpdateCatalogRecordAsync(int id,UpdateCatalogRecordRequest request, CancellationToken ct);
         public Task<bool>DeleteCatalogRecordAsync(int id, CancellationToken ct);
         #endregion
         #endregion

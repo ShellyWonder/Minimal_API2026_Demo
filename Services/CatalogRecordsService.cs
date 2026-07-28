@@ -1,4 +1,6 @@
-﻿namespace MinimalAPI2026Demo.Services
+﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
+namespace MinimalAPI2026Demo.Services
 {
     public class CatalogRecordsService(ApplicationDbContext db) : ICatalogRecordsService
     {
@@ -121,10 +123,27 @@
             };
         }
 
-        public Task<bool> UpdateCatalogRecordAsync(int recordId, UpdateCatalogRecordRequest request, CancellationToken ct)
+        public async Task<bool> UpdateCatalogRecordAsync(int id, UpdateCatalogRecordRequest request, CancellationToken ct)
         {
-            throw new NotImplementedException();
-        }
+            var record = await db.CatalogRecords.FindAsync([id],ct);
+                                         
+            if (record is null) return false;
+           record.Status = request.Status;
+
+                //Update or clear VerifiedById
+                if (string.IsNullOrWhiteSpace(request.VerifiedById)) record.VerifiedById = null;
+            
+                // Optionally validate verified user ID exists
+                var userExists = await db.Users.AnyAsync(u => u.Id == request.VerifiedById, ct);
+                if (!userExists) return false;
+
+                record.VerifiedById = request.VerifiedById;
+
+            await db.SaveChangesAsync(ct);
+
+            return true;
+
+            }
 
         public Task<bool> DeleteCatalogRecordAsync(int id, CancellationToken ct)
         {
