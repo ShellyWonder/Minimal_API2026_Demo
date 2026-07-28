@@ -54,13 +54,18 @@
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
-            
+            privateGroup.MapDelete("/{id:int}", DeleteCatalogRecord)
+            .WithName(nameof(DeleteCatalogRecord))
+            .WithDescription("Deletes a single catalog record associated with an artifact ID - Authorized Access Only")
+            .WithSummary("Delete a single catalog record - Authorization required")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
             #endregion
 
             return route;
         }
-
-        
         #region Handlers
 
         #region Get Record by Record Id
@@ -111,9 +116,18 @@
             var success = await service.UpdateCatalogRecordAsync(id, request, ct);
 
             if (!success) return TypedResults.NotFound();
-                    return TypedResults.NoContent();
+            return TypedResults.NoContent();
         }
 
+        private async static Task<Results<NoContent,NotFound>> DeleteCatalogRecord(int id, 
+                                                                                ICatalogRecordsService service,
+                                                                                CancellationToken ct)
+        {
+            var deleted = await service.DeleteCatalogRecordAsync(id, ct);
+            if(!deleted) return TypedResults.NotFound();
+
+            return TypedResults.NoContent();
+        }
 
         #endregion
 

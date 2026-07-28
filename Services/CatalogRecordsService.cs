@@ -145,9 +145,15 @@ namespace MinimalAPI2026Demo.Services
 
             }
 
-        public Task<bool> DeleteCatalogRecordAsync(int id, CancellationToken ct)
+        public async Task<bool> DeleteCatalogRecordAsync(int id, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var catalogRecord = await db.CatalogRecords.FindAsync([id], ct);
+            if (catalogRecord is null) return false;
+
+            db.CatalogRecords.Remove(catalogRecord);
+            await db.SaveChangesAsync(ct);
+
+            return true;
         }
         #endregion
     }
