@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="../ThePlatoProject.Client/ThePlatoProject.Client.csproj" />
+  <Project Path="../ThePlatoProject.Contracts/ThePlatoProject.Contracts.csproj" />
+  <Project Path="MinimalAPI2026Demo.csproj" />
+</Solution>

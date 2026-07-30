@@ -31,4 +31,8 @@
     <Folder Include="wwwroot\Site\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ThePlatoProject.Contracts\ThePlatoProject.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>
