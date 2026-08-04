@@ -1,6 +1,7 @@
-﻿namespace MinimalAPI2026Demo.Models.Responses
+﻿namespace ThePlatoProject.Contracts.Responses
 {
-    public class PrivateSiteResponse
+   
+    public class PublicSiteResponse
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -8,8 +9,8 @@
         public string? Cooridinates { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public string? Description { get; set; }
-        public string? PublicNarrative { get; set; }
-        public string? AeonNarrative { get; set; }
+        public string?  Description { get; set; }
+        public string?  PublicNarrative { get; set; }
+
     }
 }

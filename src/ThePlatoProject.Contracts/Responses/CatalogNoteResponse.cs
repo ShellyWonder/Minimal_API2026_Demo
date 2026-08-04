@@ -1,4 +1,4 @@
-﻿namespace MinimalAPI2026Demo.Models.Responses
+﻿namespace ThePlatoProject.Contracts.Responses
 {
     public class CatalogNoteResponse
     {

@@ -1,4 +1,4 @@
-﻿namespace MinimalAPI2026Demo.Models.Requests
+﻿namespace ThePlatoProject.Contracts.Requests
 {
     
     public class CreateSiteRequest

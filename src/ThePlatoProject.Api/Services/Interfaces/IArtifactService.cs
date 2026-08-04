@@ -1,4 +1,6 @@
-﻿namespace MinimalAPI2026Demo.Services.Interfaces
+﻿using ThePlatoProject.Contracts.Requests;
+
+namespace MinimalAPI2026Demo.Services.Interfaces
 {
     public interface IArtifactService
     {

@@ -21,5 +21,7 @@ global using MinimalAPI2026Demo.Endpoints.Sites;
 global using MinimalAPI2026Demo.Endpoints.Artifacts;
 global using MinimalAPI2026Demo.Endpoints.CatalogRecords;
 global using MinimalAPI2026Demo.Extensions;
-global using MinimalAPI2026Demo.Models.Responses;
-global using MinimalAPI2026Demo.Models.Requests;
+
+global using ThePlatoProject.Contracts.Requests;
+//global using ThePlatoProject.Contracts.Responses;
+//global using ThePlatoProject.Contracts.DTOs;

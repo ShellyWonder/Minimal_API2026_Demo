@@ -1,4 +1,6 @@
-﻿namespace MinimalAPI2026Demo.Services
+﻿using ThePlatoProject.Contracts.Requests;
+
+namespace MinimalAPI2026Demo.Services
 {
     public class ArtifactService(ApplicationDbContext db) : IArtifactService
     {
