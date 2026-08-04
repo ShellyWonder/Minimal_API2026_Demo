@@ -13,9 +13,16 @@
         public ApplicationUser? VerifiedBy { get; set; }
 
         [Required]
-        public string Status { get; set; } = "Draft";
+        public string Status { get; set; } = "Unverified";
         public DateTime DateSubmitted { get; set; } = DateTime.UtcNow;
         public ICollection<CatalogNote> Notes { get; set; } = [];
+
+        public VerificationStatus VerificationStatus { get; set; }
+                                               = VerificationStatus.Unverified;
+
+        public ArchiveWorkflowState ArchiveState { get; set; }
+                                         = ArchiveWorkflowState.None;
+            
 
 
     }

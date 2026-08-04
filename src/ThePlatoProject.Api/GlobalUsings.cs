@@ -12,7 +12,6 @@ global using MinimalAPI2026Demo.Services;
 global using MinimalAPI2026Demo.Services.Interfaces;
 
 global using MinimalAPI2026Demo.Models;
-global using MinimalAPI2026Demo.Enums;
 global using MinimalAPI2026Demo.Filters;
 global using MinimalAPI2026Demo.Endpoints.Home;
 global using MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints;
@@ -23,5 +22,6 @@ global using MinimalAPI2026Demo.Endpoints.CatalogRecords;
 global using MinimalAPI2026Demo.Extensions;
 
 global using ThePlatoProject.Contracts.Requests;
-//global using ThePlatoProject.Contracts.Responses;
+global using ThePlatoProject.Contracts.Responses;
+global using ThePlatoProject.Contracts.Enums;
 //global using ThePlatoProject.Contracts.DTOs;

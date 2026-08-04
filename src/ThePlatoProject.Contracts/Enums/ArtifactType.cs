@@ -1,9 +1,9 @@
 ﻿
-namespace MinimalAPI2026Demo.Enums
+namespace ThePlatoProject.Contracts.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ArtifactType
     {
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         Weapon = 1,
         EnergySource = 2,
         CommunicationDevice =3,

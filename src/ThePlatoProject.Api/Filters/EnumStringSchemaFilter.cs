@@ -1,5 +1,6 @@
 ﻿using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using ThePlatoProject.Contracts.Enums;
 
 namespace MinimalAPI2026Demo.Filters
 {

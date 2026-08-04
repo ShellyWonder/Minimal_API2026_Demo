@@ -1,4 +1,5 @@
-﻿using ThePlatoProject.Contracts.Requests;
+﻿using ThePlatoProject.Contracts.Enums;
+using ThePlatoProject.Contracts.Requests;
 
 namespace MinimalAPI2026Demo.Services
 {
