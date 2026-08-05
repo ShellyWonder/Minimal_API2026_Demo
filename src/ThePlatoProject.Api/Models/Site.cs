@@ -39,31 +39,20 @@
         // Verification navigation
         public ApplicationUser? VerifiedBy { get; set; }
 
-        //archive process workflow
-        public ArchiveWorkflowState ArchiveState { get; set; }
-                                        = ArchiveWorkflowState.None;
+        //site closure workflow properties
+        public SiteLifecycleStatus LifecycleStatus { get; set; }
+                                = SiteLifecycleStatus.Active;
 
-        [MaxLength(1000)]
-        public string? ArchiveReason { get; set; }
+        public string? ClosureReason { get; set; }
 
-        public DateTimeOffset? ArchiveRequestedAtUtc { get; set; }
+        public DateTimeOffset? ClosureRequestedAtUtc { get; set; }
+        public string? ClosureRequestedById { get; set; }
 
-        public string? ArchiveRequestedById { get; set; }
+        public DateTimeOffset? ClosureAuthorizedAtUtc { get; set; }
+        public string? ClosureAuthorizedById { get; set; }
 
-        public DateTimeOffset? ArchiveAuthorizedAtUtc { get; set; }
-
-        public string? ArchiveAuthorizedById { get; set; }
-
-        public DateTimeOffset? ArchivedAtUtc { get; set; }
-
-        public string? ArchivedById { get; set; }
-
-        //archive navigation properties
-        public ApplicationUser? ArchiveRequestedBy { get; set; }
-
-        public ApplicationUser? ArchiveAuthorizedBy { get; set; }
-
-        public ApplicationUser? ArchivedBy { get; set; }
+        public DateTimeOffset? ClosedAtUtc { get; set; }
+        public string? ClosedById { get; set; }
 
         //collection navigation properties
         public ICollection<Artifact> Artifacts { get; set; } = [];
