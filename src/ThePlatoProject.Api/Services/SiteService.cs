@@ -36,7 +36,7 @@
                     Longitude = s.Longitude,
                     Description = s.Description,
                     PublicNarrative = s.PublicNarrative,
-                    AeonNarrative = s.AeonNarrative
+                    ALRECNarrative= s.ALRECNarrative
                 })
 
                 .ToListAsync(ct);
@@ -79,7 +79,7 @@
                     Longitude = s.Longitude,
                     Description = s.Description,
                     PublicNarrative = s.PublicNarrative,
-                    AeonNarrative = s.AeonNarrative
+                    ALRECNarrative= s.ALRECNarrative
                 })
                 .FirstOrDefaultAsync(ct);
         }
@@ -97,7 +97,7 @@
                 Longitude = request.Longitude,
                 Description = request.Description,
                 PublicNarrative = request.PublicNarrative,
-                AeonNarrative = request.AeonNarrative
+                ALRECNarrative= request.AeonNarrative
             };
             db.Sites.Add(site);
             await db.SaveChangesAsync(ct);
@@ -112,7 +112,7 @@
                 Longitude = site.Longitude,
                 Description = site.Description,
                 PublicNarrative = site.PublicNarrative,
-                AeonNarrative = site.AeonNarrative
+                ALRECNarrative= site.ALRECNarrative
             };
         }
 
@@ -128,7 +128,7 @@
             site.Longitude = request.Longitude;
             site.Description = request.Description;
             site.PublicNarrative = request.PublicNarrative;
-            site.AeonNarrative = request.AeonNarrative;
+            site.ALRECNarrative= request.ALRECNarrative;
 
             await db.SaveChangesAsync(ct);
 

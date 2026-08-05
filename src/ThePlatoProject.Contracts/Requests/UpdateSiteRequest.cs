@@ -1,4 +1,4 @@
-﻿namespace MinimalAPI2026Demo.Models.Requests
+﻿namespace ThePlatoProject.Contracts.Requests
 {
     
     public class UpdateSiteRequest 
@@ -22,7 +22,7 @@
         public string? PublicNarrative { get; set; }
 
         [MaxLength(2000)]
-        public string? AeonNarrative { get; set; }
+        public string? ALRECNarrative { get; set; }
     }
 }
     

@@ -10,6 +10,6 @@
         public double Longitude { get; set; }
         public string? Description { get; set; }
         public string? PublicNarrative { get; set; }
-        public string? AeonNarrative { get; set; }
+        public string? ALRECNarrative{ get; set; }
     }
 }

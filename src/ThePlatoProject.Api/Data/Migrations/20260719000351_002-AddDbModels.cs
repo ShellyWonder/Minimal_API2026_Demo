@@ -25,7 +25,7 @@ namespace MinimalAPI2026Demo.Migrations
                     Longitude = table.Column<double>(type: "double precision", nullable: false),
                     Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     PublicNarrative = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
-                    AeonNarrative = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true)
+                    ALRECNarrative= table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
