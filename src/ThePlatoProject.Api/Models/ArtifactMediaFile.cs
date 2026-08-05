@@ -1,5 +1,7 @@
 ﻿namespace MinimalAPI2026Demo.Models
 {
+    // All artifact children are archived with the artifact, so no need for a separate archival workflow here.
+    // The artifact's archival status will be used to determine if the media file is archived or not.
     public class ArtifactMediaFile
     {
         public int Id { get; set; }
@@ -24,33 +26,6 @@
         public string? VerifiedById { get; set; }
 
         public ApplicationUser? VerifiedBy { get; set; }
-
-        //Archive properties
-        public ArchiveWorkflowState ArchiveState { get; set; }
-                                     = ArchiveWorkflowState.None;
-
-        [MaxLength(1000)]
-        public string? ArchiveReason { get; set; }
-
-        public DateTimeOffset? ArchiveRequestedAtUtc { get; set; }
-
-        public string? ArchiveRequestedById { get; set; }
-
-        public DateTimeOffset? ArchiveAuthorizedAtUtc { get; set; }
-
-        public string? ArchiveAuthorizedById { get; set; }
-
-        public DateTimeOffset? ArchivedAtUtc { get; set; }
-
-        public string? ArchivedById { get; set; }
-
-        //Archive navigation properties
-        public ApplicationUser? ArchiveRequestedBy { get; set; }
-
-        public ApplicationUser? ArchiveAuthorizedBy { get; set; }
-
-        public ApplicationUser? ArchivedBy { get; set; }
-
 
         public int ArtifactId { get; set; }//Foreign key
         public Artifact Artifact { get; set; } = null!; //navigation Property
