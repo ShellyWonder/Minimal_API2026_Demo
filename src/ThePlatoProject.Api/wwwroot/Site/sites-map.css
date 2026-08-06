@@ -1,5 +1,5 @@
 ﻿/* ==========================================
-   Aeon Registry UI Styles
+   alrec Registry UI Styles
    Organized for teaching clarity
    1. Theme Variables
    2. Global Layout & Typography
@@ -10,11 +10,11 @@
 
 /* ===== 1. THEME VARIABLES ===== */
 :root {
-    --aeon-cyan: #00e0ff; /* Primary accent glow */
-    --aeon-cyan-dim: #00b8cc; /* Muted hover tone */
-    --aeon-bg: #0d0d0d; /* Background */
-    --aeon-light: #e0e0e0; /* Light text */
-    --aeon-border: #222; /* Borders & dividers */
+    --alrec-cyan: #00e0ff; /* Primary accent glow */
+    --alrec-cyan-dim: #00b8cc; /* Muted hover tone */
+    --alrec-bg: #0d0d0d; /* Background */
+    --alrec-light: #e0e0e0; /* Light text */
+    --alrec-border: #222; /* Borders & dividers */
 }
 
 
@@ -24,8 +24,8 @@ html, body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: var(--aeon-bg);
-    color: var(--aeon-light);
+    background-color: var(--alrec-bg);
+    color: var(--alrec-light);
     font-family: "source-code-pro", monospace;
 }
 
@@ -38,26 +38,26 @@ html, body {
     top: 0;
     width: 100%;
     z-index: 1000;
-    background-color: var(--aeon-bg);
-    border-bottom: 2px solid var(--aeon-cyan);
+    background-color: var(--alrec-bg);
+    border-bottom: 2px solid var(--alrec-cyan);
     box-shadow: 0 0 12px rgba(0, 224, 255, 0.25);
 }
 
 .nav-logo {
     height: 36px;
-    filter: drop-shadow(0 0 6px var(--aeon-cyan));
+    filter: drop-shadow(0 0 6px var(--alrec-cyan));
 }
 
 /* Navbar mobile button */
 .navbar .btn-outline-info {
-    border-color: var(--aeon-cyan);
-    color: var(--aeon-cyan);
+    border-color: var(--alrec-cyan);
+    color: var(--alrec-cyan);
 }
 
     .navbar .btn-outline-info:hover,
     .navbar .btn-outline-info:focus {
-        background-color: var(--aeon-cyan);
-        color: var(--aeon-bg);
+        background-color: var(--alrec-cyan);
+        color: var(--alrec-bg);
         box-shadow: 0 0 8px rgba(0, 224, 255, 0.4);
     }
 
@@ -69,7 +69,7 @@ html, body {
 }
 
 .nav-login-link {
-    color: var(--aeon-cyan);
+    color: var(--alrec-cyan);
     text-decoration: none;
     font-size: 0.95rem;
     padding: 4px 8px;
@@ -78,30 +78,30 @@ html, body {
 }
 
     .nav-login-link:hover {
-        color: var(--aeon-bg);
-        background-color: var(--aeon-cyan);
+        color: var(--alrec-bg);
+        background-color: var(--alrec-cyan);
         box-shadow: 0 0 10px rgba(0, 224, 255, 0.45);
     }
 
 
 /* --- Buttons & Links --- */
 .btn-outline-info {
-    border-color: var(--aeon-cyan);
-    color: var(--aeon-cyan);
+    border-color: var(--alrec-cyan);
+    color: var(--alrec-cyan);
 }
 
     .btn-outline-info:hover {
-        background-color: var(--aeon-cyan);
-        color: var(--aeon-bg);
+        background-color: var(--alrec-cyan);
+        color: var(--alrec-bg);
     }
 
 .text-link {
-    color: var(--aeon-cyan);
+    color: var(--alrec-cyan);
     text-decoration: none;
 }
 
     .text-link:hover {
-        color: var(--aeon-cyan-dim);
+        color: var(--alrec-cyan-dim);
         text-decoration: underline;
     }
 
@@ -119,15 +119,15 @@ html, body {
 
 .sidebar {
     background-color: #121212;
-    color: var(--aeon-light);
-    border-right: 1px solid var(--aeon-border);
+    color: var(--alrec-light);
+    border-right: 1px solid var(--alrec-border);
     overflow-y: auto;
     font-size: 0.92rem;
     margin-top: 56px;
 }
 
 .sidebar-title {
-    color: var(--aeon-cyan);
+    color: var(--alrec-cyan);
     text-transform: uppercase;
     font-size: 1rem;
     letter-spacing: 1.5px;
@@ -142,43 +142,43 @@ html, body {
 
     .list-group-item:hover {
         background-color: #202020;
-        color: var(--aeon-light);
+        color: var(--alrec-light);
     }
 
     .list-group-item.active {
-        background-color: var(--aeon-cyan) !important;
-        border-color: var(--aeon-cyan) !important;
-        color: var(--aeon-bg) !important;
+        background-color: var(--alrec-cyan) !important;
+        border-color: var(--alrec-cyan) !important;
+        color: var(--alrec-bg) !important;
     }
 
 
 /* --- Leaflet Popups & Attribution --- */
 .leaflet-container {
-    background: var(--aeon-bg);
+    background: var(--alrec-bg);
 }
 
 .leaflet-popup-content-wrapper {
     background-color: #1a1a1a;
-    color: var(--aeon-light);
-    border: 1px solid var(--aeon-cyan);
+    color: var(--alrec-light);
+    border: 1px solid var(--alrec-cyan);
     box-shadow: 0 0 12px rgba(0, 224, 255, 0.6);
     font-family: "source-code-pro", monospace;
 }
 
 .leaflet-popup-tip {
     background-color: #1a1a1a;
-    border: 1px solid var(--aeon-cyan);
+    border: 1px solid var(--alrec-cyan);
 }
 
 .leaflet-popup-content h6 {
-    color: var(--aeon-cyan);
+    color: var(--alrec-cyan);
     font-weight: 700;
     margin-bottom: 0.25rem;
 }
 
 .leaflet-popup-content p {
     margin: 0.25rem 0;
-    color: var(--aeon-light);
+    color: var(--alrec-light);
     line-height: 1.4;
 }
 
@@ -193,25 +193,25 @@ html, body {
 }
 
     .leaflet-container .leaflet-control-attribution a {
-        color: var(--aeon-cyan) !important;
+        color: var(--alrec-cyan) !important;
         text-decoration: none !important;
     }
 
         .leaflet-container .leaflet-control-attribution a:hover {
-            color: var(--aeon-cyan-dim) !important;
+            color: var(--alrec-cyan-dim) !important;
             text-decoration: underline !important;
         }
 
 
 /* --- Artifact List Cards --- */
 .section-heading {
-    color: var(--aeon-cyan);
+    color: var(--alrec-cyan);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 0.75rem;
     margin-bottom: 0.4rem;
-    border-bottom: 1px solid var(--aeon-border);
+    border-bottom: 1px solid var(--alrec-border);
     padding-bottom: 0.25rem;
     font-size: 0.9rem;
 }
@@ -230,21 +230,21 @@ html, body {
     height: 100px;
     width: 100px;
     object-fit: cover;
-    border: 1px solid var(--aeon-cyan);
+    border: 1px solid var(--alrec-cyan);
     border-radius: 4px;
     box-shadow: 0 0 4px rgba(0, 224, 255, 0.3);
-    background-color: var(--aeon-bg);
+    background-color: var(--alrec-bg);
 }
 
 .artifact-text {
     flex: 1;
-    color: var(--aeon-light);
+    color: var(--alrec-light);
     line-height: 1.25;
     overflow: hidden;
 }
 
     .artifact-text h6 {
-        color: var(--aeon-cyan);
+        color: var(--alrec-cyan);
         font-weight: 600;
         margin: 0 0 0.15rem 0;
         font-size: 0.9rem;
@@ -274,8 +274,8 @@ html, body {
         width: 100%;
         height: 250px;
         object-fit: contain;
-        border: 1px solid var(--aeon-cyan);
-        background-color: var(--aeon-bg);
+        border: 1px solid var(--alrec-cyan);
+        background-color: var(--alrec-bg);
     }
 
     .artifact-text {
@@ -291,7 +291,7 @@ html, body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: var(--aeon-bg);
+    background-color: var(--alrec-bg);
     padding-top: 56px; /* offset navbar height */
     padding-left: 1rem; /* 👈 add gutters */
     padding-right: 1rem; /* 👈 add gutters */
@@ -299,7 +299,7 @@ html, body {
 
 .auth-card {
     background-color: rgba(18, 18, 18, 0.95);
-    border: 1px solid var(--aeon-cyan);
+    border: 1px solid var(--alrec-cyan);
     box-shadow: 0 0 15px rgba(0, 224, 255, 0.25);
     border-radius: 8px;
     max-width: 420px;
@@ -319,7 +319,7 @@ html, body {
 }
 
     .auth-card h4 {
-        color: var(--aeon-cyan);
+        color: var(--alrec-cyan);
         text-align: center;
         margin-bottom: 1.5rem;
         text-transform: uppercase;
@@ -332,38 +332,38 @@ html, body {
     }
 
     .auth-card .btn-info {
-        background-color: var(--aeon-cyan);
-        border-color: var(--aeon-cyan);
-        color: var(--aeon-bg);
+        background-color: var(--alrec-cyan);
+        border-color: var(--alrec-cyan);
+        color: var(--alrec-bg);
         font-weight: 600;
     }
 
         .auth-card .btn-info:hover {
-            background-color: var(--aeon-cyan-dim);
-            border-color: var(--aeon-cyan-dim);
+            background-color: var(--alrec-cyan-dim);
+            border-color: var(--alrec-cyan-dim);
         }
 
 /* --- Dark Modal (Details Popup) --- */
 .dark-modal {
     background-color: #121212;
-    color: var(--aeon-light);
-    border: 1px solid var(--aeon-cyan);
+    color: var(--alrec-light);
+    border: 1px solid var(--alrec-cyan);
     box-shadow: 0 0 15px rgba(0, 224, 255, 0.3);
 }
 
     .dark-modal .modal-header {
-        border-bottom: 1px solid var(--aeon-cyan);
+        border-bottom: 1px solid var(--alrec-cyan);
     }
 
     .dark-modal .modal-title {
-        color: var(--aeon-cyan);
+        color: var(--alrec-cyan);
         font-family: "source-code-pro", monospace;
     }
 
     .dark-modal .modal-body {
         font-family: "source-code-pro", monospace;
         background-color: #0d0d0d;
-        color: var(--aeon-light);
+        color: var(--alrec-light);
         white-space: normal;
     }
 
@@ -380,7 +380,7 @@ html, body {
 /* Optional scrollable area tweaks */
 .modal-dialog-scrollable .modal-content {
     background-color: #121212;
-    border: 1px solid var(--aeon-cyan);
+    border: 1px solid var(--alrec-cyan);
 }
 
 #result {
