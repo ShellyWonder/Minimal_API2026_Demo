@@ -14,9 +14,9 @@
         [MaxLength(2500)]
         public string? PublicNarrative { get; set; }
 
-        public DateTime DateDiscovered { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset DateDiscoveredUtc { get; set; } 
 
-        public string? Type { get; set; } //artifact type
+        public ArtifactType Type { get; set; } //artifact type
 
         [Required]
         public int SiteId { get; set; }

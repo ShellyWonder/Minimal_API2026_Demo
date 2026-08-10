@@ -1,4 +1,5 @@
-﻿namespace ThePlatoProject.Contracts.Requests
+﻿
+namespace ThePlatoProject.Contracts.Requests
 {
     public class CreateArtifactRequest
     {
@@ -8,17 +9,16 @@
         [Required, MaxLength(500)]
         public string CatalogNumber { get; set; } = string.Empty;
 
-        [MaxLength(2000)]
+        [MaxLength(2500)]
         public string? Description { get; set; }
 
         [MaxLength(2000)]
         public string? PublicNarrative { get; set; }
 
         [Required]
-        public DateTime DateDiscovered { get; set; } = DateTime.UtcNow;
-
+        public DateTimeOffset DateDiscoveredUtc { get; set; } 
         [Required]
-        public string Type { get; set; } = string.Empty; //artifact type enum as a string
+        public ArtifactType Type { get; set; } = ArtifactType.Unknown; //artifact type enum
        
         [Required]
         public int SiteId { get; set; }

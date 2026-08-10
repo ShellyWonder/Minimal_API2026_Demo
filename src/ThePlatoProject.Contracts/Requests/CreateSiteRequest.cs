@@ -22,6 +22,6 @@
         public string? PublicNarrative { get; set; }
 
         [MaxLength(2000)]
-        public string? AeonNarrative { get; set; }
+        public string? ALRECNarrative { get; set; }
     }
 }
