@@ -4,11 +4,12 @@ namespace MinimalAPI2026Demo.Models
     public class ApplicationUser : IdentityUser
     {
         [Required]
-        public string? FirstName { get; set; }
-        [Required]
-        public string? LastName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
-        public string FullName => $"({FirstName} {LastName})";
+        [Required]
+        public string LastName { get; set; } = string.Empty;
+
+        public string FullName => $"{FirstName} {LastName}";
 
         public bool IsActive { get; set; } = true;
 
@@ -35,10 +36,9 @@ namespace MinimalAPI2026Demo.Models
 
         // Collection navigation properties
         public ICollection<CatalogRecord> SubmittedCatalogRecords { get; set; } = [];
-        public ICollection<CatalogRecord> VerifiedCatalogRecords { get; set; } = [];
         public ICollection<ArtifactMediaFile> UploadedMedia { get; set; } = [];
 
-        public ICollection<CatalogNote> AuthoredCatalogNotes { get; set; } = [];
+        public ICollection<CatalogRecordNote> AuthoredCatalogNotes { get; set; } = [];
 
         public ICollection<DirectMessage> SentMessages { get; set; } = [];
 

@@ -5,10 +5,10 @@
         public int Id { get; set; }
 
         [Required, MaxLength(200)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required, MaxLength(100)]
-        public string? Location { get; set; }
+        public string Location { get; set; } = string.Empty;
 
         [MaxLength(100)]
         public string? Coordinates { get; set; }
@@ -18,13 +18,13 @@
         public double Longitude { get; set; }
 
         [Required, MaxLength(200)]
-        public string? Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [MaxLength(2000)]
         public string? PublicNarrative { get; set; }
 
         [MaxLength(2000)]
-        public string? ALRECNarrative{ get; set; }
+        public string ALRECNarrative { get; set; } = string.Empty;
 
         public bool IsPublic { get; set; }
 
@@ -43,6 +43,7 @@
         public SiteLifecycleStatus LifecycleStatus { get; set; }
                                 = SiteLifecycleStatus.Active;
 
+        [MaxLength(1000)]
         public string? ClosureReason { get; set; }
 
         public DateTimeOffset? ClosureRequestedAtUtc { get; set; }
@@ -58,5 +59,10 @@
         public ICollection<Artifact> Artifacts { get; set; } = [];
 
         public ICollection<ApplicationUser> AssignedEmployees { get; set; } = [];
+
+        //closure navigation properties
+        public ApplicationUser? ClosureRequestedBy { get; set; }
+        public ApplicationUser? ClosureAuthorizedBy { get; set; }
+        public ApplicationUser? ClosedBy { get; set; }
     }
 }

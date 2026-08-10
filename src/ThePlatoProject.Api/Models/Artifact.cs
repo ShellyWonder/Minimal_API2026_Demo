@@ -8,7 +8,7 @@
         public string Name { get; set; } = string.Empty;
 
         [Required, MaxLength(500)]
-        public string? CatalogNumber { get; set; }
+        public string CatalogNumber { get; set; } = string.Empty;
 
         [MaxLength(2500)]
         public string? Description { get; set; }
@@ -16,10 +16,10 @@
         [MaxLength(2500)]
         public string? PublicNarrative { get; set; }
 
-        public DateTime DateDiscovered { get; set; } = DateTime.UtcNow;
-
-        public string? Type { get; set; } //artifact type
-
+        public DateTimeOffset DateSubmittedUtc {  get; set; } = DateTimeOffset.UtcNow;
+       
+        public DateTimeOffset DateDiscoveredUtc  { get; set; } 
+        public ArtifactType Type { get; set; } = ArtifactType.Unknown;
         public bool IsPublic { get; set; }
 
         //Verification and approval properties
