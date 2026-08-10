@@ -1,6 +1,6 @@
 ﻿namespace MinimalAPI2026Demo.Models
 {
-    public class CatalogNote
+    public class CatalogRecordNote
     {
         public int Id { get; set; }
         [Required]
@@ -11,6 +11,6 @@
 
         [Required, MaxLength(1000)]
         public string Content { get; set; } = string.Empty;
-        public DateTimeOffset Created { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedAtUtc { get; set; } = DateTimeOffset.UtcNow;
     }
 }
