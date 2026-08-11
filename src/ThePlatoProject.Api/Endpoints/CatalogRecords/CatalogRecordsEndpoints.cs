@@ -34,7 +34,7 @@
             .Produces(StatusCodes.Status500InternalServerError);
             #endregion
 
-            #region Create | Update | Delete
+            #region Create | Update 
             privateGroup.MapPost("", CreateCatalogRecord)
             .WithName(nameof(CreateCatalogRecord))
             .WithDescription("Creates a single catalog record associated with an artifact ID - Authorized Access Only")
@@ -44,24 +44,16 @@
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
 
-            privateGroup.MapPut("/{id:int}", UpdateCatalogRecord)
-            .WithName(nameof(UpdateCatalogRecord))
-            .WithDescription("Updates a single catalog record associated with an artifact ID - Authorized Access Only")
-            .WithSummary("Update a single catalog record - Authorization required")
-            .Accepts<UpdateCatalogRecordRequest>("Application/json")
-            .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status404NotFound)
-            .Produces(StatusCodes.Status500InternalServerError);
+            // privateGroup.MapPut("/{id:int}", UpdateCatalogRecord)
+            //.WithName(nameof(UpdateCatalogRecord))
+            //.WithDescription("Updates a single catalog record associated with an artifact ID - Authorized Access Only")
+            //.WithSummary("Update a single catalog record - Authorization required")
+            //.Produces(StatusCodes.Status204NoContent)
+            //.Produces(StatusCodes.Status401Unauthorized)
+            //.Produces(StatusCodes.Status404NotFound)
+            //.Produces(StatusCodes.Status500InternalServerError);
 
-            privateGroup.MapDelete("/{id:int}", DeleteCatalogRecord)
-            .WithName(nameof(DeleteCatalogRecord))
-            .WithDescription("Deletes a single catalog record associated with an artifact ID - Authorized Access Only")
-            .WithSummary("Delete a single catalog record - Authorization required")
-            .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status404NotFound)
-            .Produces(StatusCodes.Status500InternalServerError);
+            
             #endregion
 
             return route;
@@ -92,7 +84,7 @@
 
         #endregion
 
-        #region Create | Update | Delete
+        #region Create | Update 
         private static async Task<Results<Created<CatalogRecordResponse>, BadRequest>> CreateCatalogRecord(ClaimsPrincipal user,
                                                                                                     CreateCatalogRecordRequest request,
                                                                                                     ICatalogRecordsService service,
@@ -108,26 +100,16 @@
 
         }
 
-        private static async Task<Results<NoContent, NotFound>> UpdateCatalogRecord(int id,
-                                                                                   UpdateCatalogRecordRequest request,
-                                                                                   ICatalogRecordsService service,
-                                                                                   CancellationToken ct)
-        {
-            var success = await service.UpdateCatalogRecordAsync(id, request, ct);
+        //private static async Task<Results<NoContent, NotFound>> UpdateCatalogRecord(int id,
+                                                                                   
+        //                                                                           ICatalogRecordsService service,
+        //                                                                           CancellationToken ct)
+        //{
+        //    var success = await service.UpdateCatalogRecordAsync(id, ct);
 
-            if (!success) return TypedResults.NotFound();
-            return TypedResults.NoContent();
-        }
-
-        private async static Task<Results<NoContent,NotFound>> DeleteCatalogRecord(int id, 
-                                                                                ICatalogRecordsService service,
-                                                                                CancellationToken ct)
-        {
-            var deleted = await service.DeleteCatalogRecordAsync(id, ct);
-            if(!deleted) return TypedResults.NotFound();
-
-            return TypedResults.NoContent();
-        }
+        //    if (!success) return TypedResults.NotFound();
+        //    return TypedResults.NoContent();
+        //}
 
         #endregion
 

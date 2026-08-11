@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="TempComboFilesfor Export\**" />
-    <Content Remove="TempComboFilesfor Export\**" />
-    <EmbeddedResource Remove="TempComboFilesfor Export\**" />
-    <None Remove="TempComboFilesfor Export\**" />
+    <Compile Remove="10-ComboModelsRevised3.1.cs" />
+    <Compile Remove="Data\DataSeedTemp.cs" />
   </ItemGroup>
+
+  
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />

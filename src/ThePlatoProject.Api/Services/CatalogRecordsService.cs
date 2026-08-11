@@ -21,7 +21,6 @@ namespace MinimalAPI2026Demo.Services
             return await db.CatalogRecords
                            .AsNoTracking()
                            .Where(cr => cr.ArtifactId == artifactId)
-                           .Include(cr => cr.VerifiedBy)
                            .Include(cr => cr.SubmittedBy)
                            .Include(cr => cr.Notes)
                              .ThenInclude(n => n.Author)
@@ -29,17 +28,13 @@ namespace MinimalAPI2026Demo.Services
                            {
                                Id = cr.Id,
                                ArtifactId = cr.ArtifactId,
-                               Status = cr.Status,
-                               DateSubmitted = cr.DateSubmitted,
+                               DateSubmittedUtc = cr.DateSubmittedUtc,
                                SubmittedBy = $"{cr.SubmittedBy.FirstName} {cr.SubmittedBy.LastName}",
-                               VerifiedBy = cr.VerifiedBy != null
-                                                        ? $"{cr.VerifiedBy.FirstName} {cr.VerifiedBy.LastName}"
-                                                        : null,
                                Notes = cr.Notes.Select(n => new CatalogNoteResponse
                                {
                                    Id = n.Id,
                                    Content = n.Content,
-                                   Created = n.Created,
+                                   Created = n.CreatedAtUtc,
                                    Author = $"{n.Author.FirstName} {n.Author.LastName}"
 
                                }).ToList()
@@ -55,7 +50,6 @@ namespace MinimalAPI2026Demo.Services
             return await db.CatalogRecords
                            .AsNoTracking()
                            .Where(cr => cr.Id == id)
-                           .Include(cr => cr.VerifiedBy)
                            .Include(cr => cr.SubmittedBy)
                            .Include(cr => cr.Notes)
                              .ThenInclude(n => n.Author)
@@ -63,17 +57,14 @@ namespace MinimalAPI2026Demo.Services
                            {
                                Id = cr.Id,
                                ArtifactId = cr.ArtifactId,
-                               Status = cr.Status,
-                               DateSubmitted = cr.DateSubmitted,
+                               DateSubmittedUtc = cr.DateSubmittedUtc,
                                SubmittedBy = $"{cr.SubmittedBy.FirstName} {cr.SubmittedBy.LastName}" ?? string.Empty,
-                               VerifiedBy = cr.VerifiedBy != null
-                                                        ? $"{cr.VerifiedBy.FirstName} {cr.VerifiedBy.LastName}"
-                                                        : null,
+                                                       
                                Notes = cr.Notes.Select(n => new CatalogNoteResponse
                                {
                                    Id = n.Id,
                                    Content = n.Content,
-                                   Created = n.Created,
+                                   Created = n.CreatedAtUtc,
                                    Author = $"{n.Author.FirstName} {n.Author.LastName}"
 
                                }).ToList()
@@ -83,8 +74,10 @@ namespace MinimalAPI2026Demo.Services
 
         #endregion
 
-        #region Create | Update | Delete
-
+        #region Create | Update 
+        //Note: Catalog Records remain permanently attached to their Artifact.
+        //Therefore, there is no delete method for Catalog Records
+        //since artifacts are transferred/warehoused, not deleted.
         public async Task<CatalogRecordResponse?> CreateCatalogRecordAsync(string userId,
                                                                             CreateCatalogRecordRequest request,
                                                                             CancellationToken ct)
@@ -97,9 +90,8 @@ namespace MinimalAPI2026Demo.Services
             var record = new CatalogRecord
             {
                 ArtifactId = request.ArtifactId,
-                Status = request.Status,
                 SubmittedById = userId,
-                DateSubmitted = DateTime.UtcNow,
+                DateSubmittedUtc = DateTime.UtcNow,
             };
             db.CatalogRecords.Add(record);
             await db.SaveChangesAsync(ct);
@@ -115,46 +107,27 @@ namespace MinimalAPI2026Demo.Services
             {
                 Id = created.Id,
                 ArtifactId = created.ArtifactId,
-                Status = created.Status,
-                DateSubmitted = created.DateSubmitted,
+                DateSubmittedUtc = created.DateSubmittedUtc,
                 SubmittedBy = $"{created.SubmittedBy.FirstName} {created.SubmittedBy.LastName}",
-                VerifiedBy = null,
                 Notes = new List<CatalogNoteResponse>()
             };
         }
 
-        public async Task<bool> UpdateCatalogRecordAsync(int id, UpdateCatalogRecordRequest request, CancellationToken ct)
-        {
-            var record = await db.CatalogRecords.FindAsync([id],ct);
-                                         
-            if (record is null) return false;
-           record.Status = request.Status;
+        //public async Task<bool> UpdateCatalogRecordAsync(int id, CancellationToken ct)
+        //{
+        //    var record = await db.CatalogRecords.FindAsync([id],ct);
+        //    if (record is null) return false;
 
-                //Update or clear VerifiedById
-                if (string.IsNullOrWhiteSpace(request.VerifiedById)) record.VerifiedById = null;
-            
-                // Optionally validate verified user ID exists
-                var userExists = await db.Users.AnyAsync(u => u.Id == request.VerifiedById, ct);
-                if (!userExists) return false;
+        //        // Optionally validate verified user ID exists
+        //        var userExists = await db.Users.AnyAsync(u => u.Id == request.VerifiedById, ct);
+        //        if (!userExists) return false;
 
-                record.VerifiedById = request.VerifiedById;
+        //    await db.SaveChangesAsync(ct);
 
-            await db.SaveChangesAsync(ct);
+        //    return true;
 
-            return true;
+        //    }
 
-            }
-
-        public async Task<bool> DeleteCatalogRecordAsync(int id, CancellationToken ct)
-        {
-            var catalogRecord = await db.CatalogRecords.FindAsync([id], ct);
-            if (catalogRecord is null) return false;
-
-            db.CatalogRecords.Remove(catalogRecord);
-            await db.SaveChangesAsync(ct);
-
-            return true;
-        }
         #endregion
     }
 }
