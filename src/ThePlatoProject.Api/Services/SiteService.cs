@@ -13,7 +13,7 @@
                                Id = s.Id,
                                Name = s.Name!,
                                Location = s.Location,
-                               Cooridinates = s.Coordinates,
+                               Coordinates = s.Coordinates,
                                Latitude = s.Latitude,
                                Longitude = s.Longitude,
                                Description = s.Description,
@@ -31,7 +31,7 @@
                     Id = s.Id,
                     Name = s.Name!,
                     Location = s.Location,
-                    Cooridinates = s.Coordinates,
+                    Coordinates = s.Coordinates,
                     Latitude = s.Latitude,
                     Longitude = s.Longitude,
                     Description = s.Description,
@@ -53,7 +53,7 @@
                            {
                                Id = s.Id,
                                Name = s.Name!,
-                               Cooridinates = s.Coordinates,
+                               Coordinates = s.Coordinates,
                                Location = s.Location,
                                Latitude = s.Latitude,
                                Longitude = s.Longitude,
@@ -74,7 +74,7 @@
                     Id = s.Id,
                     Name = s.Name!,
                     Location = s.Location,
-                    Cooridinates = s.Coordinates,
+                    Coordinates = s.Coordinates,
                     Latitude = s.Latitude,
                     Longitude = s.Longitude,
                     Description = s.Description,
@@ -85,7 +85,9 @@
         }
         #endregion
 
-        #region Create | Update | Delete
+        #region Create | Update 
+        //Note: Per SRS sites are closed, not deleted.
+        //Therefore, there is no need to implement a delete method for sites. Instead, we implement a method to close a site.
         public async Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct)
         {
             var site = new Site
@@ -95,9 +97,9 @@
                 Coordinates = request.Coordinates,
                 Latitude = request.Latitude,
                 Longitude = request.Longitude,
-                Description = request.Description,
+                Description = request.Description ?? "No description available.",
                 PublicNarrative = request.PublicNarrative,
-                ALRECNarrative= request.AeonNarrative
+                ALRECNarrative= request.ALRECNarrative ?? "No information available."
             };
             db.Sites.Add(site);
             await db.SaveChangesAsync(ct);
@@ -107,7 +109,7 @@
                 Id = site.Id,
                 Name = site.Name,
                 Location = site.Location,
-                Cooridinates = site.Coordinates,
+                Coordinates = site.Coordinates,
                 Latitude = site.Latitude,
                 Longitude = site.Longitude,
                 Description = site.Description,
@@ -126,9 +128,9 @@
             site.Coordinates = request.Coordinates;
             site.Latitude = request.Latitude;
             site.Longitude = request.Longitude;
-            site.Description = request.Description;
+            site.Description = request.Description ?? "No description available.";
             site.PublicNarrative = request.PublicNarrative;
-            site.ALRECNarrative= request.ALRECNarrative;
+            site.ALRECNarrative= request.ALRECNarrative ?? "No information available.";
 
             await db.SaveChangesAsync(ct);
 
@@ -136,16 +138,6 @@
 
         }
 
-        public async Task<bool> DeleteSiteAsync(int id, CancellationToken ct)
-        {
-            var site = await db.Sites.FindAsync(id, ct);
-            if (site is null) return false;
-
-            db.Sites.Remove(site);
-            await db.SaveChangesAsync(ct);
-
-            return true;
-        }
         #endregion
     }
 }
