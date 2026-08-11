@@ -18,7 +18,7 @@ namespace MinimalAPI2026Demo.Services
                                Name = a.Name,
                                CatalogNumber = a.CatalogNumber ?? string.Empty,
                                PublicNarrative = a.PublicNarrative ?? string.Empty,
-                               DateDiscovered = a.DateDiscovered,
+                               DateDiscoveredUtc = a.DateDiscoveredUtc,
                                Type = a.Type!.ToString(),
                                //navigation properties
                                SiteName = a.Site != null ? a.Site.Name! : string.Empty,
@@ -44,7 +44,7 @@ namespace MinimalAPI2026Demo.Services
                                CatalogNumber = a.CatalogNumber ?? string.Empty,
                                PublicNarrative = a.PublicNarrative ?? string.Empty,
                                Description = a.Description ?? string.Empty,
-                               DateDiscovered = a.DateDiscovered,
+                               DateDiscoveredUtc = a.DateDiscoveredUtc,
                                Type = a.Type!.ToString(),
                                //navigation properties
                                SiteName = a.Site != null ? a.Site.Name! : string.Empty,
@@ -77,7 +77,7 @@ namespace MinimalAPI2026Demo.Services
                                Name = a.Name,
                                CatalogNumber = a.CatalogNumber ?? string.Empty,
                                PublicNarrative = a.PublicNarrative ?? string.Empty,
-                               DateDiscovered = a.DateDiscovered,
+                               DateDiscoveredUtc = a.DateDiscoveredUtc,
                                Type = a.Type!.ToString() ?? "unknown",
                                SiteName = a.Site != null ? a.Site.Name! : string.Empty,
                                PrimaryImageUrl = a.MediaFiles
@@ -108,7 +108,7 @@ namespace MinimalAPI2026Demo.Services
                                CatalogNumber = a.CatalogNumber ?? string.Empty,
                                PublicNarrative = a.PublicNarrative ?? string.Empty,
                                Description = a.Description ?? string.Empty,
-                               DateDiscovered = a.DateDiscovered,
+                               DateDiscoveredUtc = a.DateDiscoveredUtc,
                                Type = a.Type!.ToString() ?? "unknown",
                                SiteName = a.Site != null ? a.Site.Name! : string.Empty,
                                PrimaryImageUrl = a.MediaFiles
@@ -134,7 +134,7 @@ namespace MinimalAPI2026Demo.Services
                                Name = a.Name,
                                CatalogNumber = a.CatalogNumber ?? string.Empty,
                                PublicNarrative = a.PublicNarrative ?? string.Empty,
-                               DateDiscovered = a.DateDiscovered,
+                               DateDiscoveredUtc = a.DateDiscoveredUtc,
                                Type = a.Type!.ToString() ?? "unknown",
                                SiteName = a.Site != null ? a.Site.Name! : "unknown",
                                PrimaryImageUrl = a.MediaFiles
@@ -158,7 +158,7 @@ namespace MinimalAPI2026Demo.Services
                                Name = a.Name,
                                CatalogNumber = a.CatalogNumber ?? string.Empty,
                                PublicNarrative = a.PublicNarrative ?? string.Empty,
-                               DateDiscovered = a.DateDiscovered,
+                               DateDiscoveredUtc = a.DateDiscoveredUtc,
                                Type = a.Type!.ToString() ?? "unknown",
                                SiteName = a.Site != null ? a.Site.Name! : "unknown",
                                PrimaryImageUrl = a.MediaFiles
@@ -171,7 +171,8 @@ namespace MinimalAPI2026Demo.Services
 
         #endregion
 
-        #region Create | Update | Delete
+        #region Create | Update 
+        //Note: Artifacts are transferred/warehoused, not deleted.
         public async Task<PrivateArtifactResponse?> CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct)
         {
             //validate site 
@@ -179,12 +180,12 @@ namespace MinimalAPI2026Demo.Services
             if (site == null) return null;// response 404NotFound
 
             // Validate the artifact type string
-            if (!Enum.TryParse<ArtifactType>(request.Type, true, out var artifactType))
+            if (!Enum.IsDefined(typeof(ArtifactType), request.Type))
             {
-                throw new ArgumentException($"Invalid artifact type '{request.Type}'. " +
+                throw new ArgumentException(
+                    $"Invalid artifact type '{request.Type}'. " +
                     $"Allowed values are: {string.Join(", ", Enum.GetNames(typeof(ArtifactType)))}");
             }
-
             //Create new artifact
             var artifact = new Artifact
             {
@@ -192,8 +193,8 @@ namespace MinimalAPI2026Demo.Services
                 CatalogNumber = request.CatalogNumber ?? string.Empty,
                 Description = request.Description ?? string.Empty,
                 PublicNarrative = request.PublicNarrative ?? string.Empty,
-                DateDiscovered = request.DateDiscovered,
-                Type = artifactType.ToString() ?? "unknown",
+                DateDiscoveredUtc = request.DateDiscoveredUtc,
+                Type = request.Type,
                 SiteId = request.SiteId
             };
 
@@ -208,7 +209,7 @@ namespace MinimalAPI2026Demo.Services
                 CatalogNumber = artifact.CatalogNumber,
                 Description = artifact.Description,
                 PublicNarrative = artifact.PublicNarrative,
-                DateDiscovered = artifact.DateDiscovered,
+                DateDiscoveredUtc = artifact.DateDiscoveredUtc,
                 Type = artifact.Type.ToString(),
                 SiteId = artifact.SiteId,
                 SiteName = site.Name ?? string.Empty,
@@ -229,28 +230,19 @@ namespace MinimalAPI2026Demo.Services
             if (artifact == null) return false;
 
             //check enum is valid
-            if (!Enum.TryParse<ArtifactType>(request.Type, true, out var artifactType)) 
-                            throw new ArgumentException("Invalid artifact type");
+            if (!Enum.IsDefined(typeof(ArtifactType), request.Type))
+            {
+                throw new ArgumentException("Invalid artifact type");
+            }
 
             artifact.Name = request.Name;
             artifact.CatalogNumber = request.CatalogNumber ?? string.Empty;
             artifact.Description = request.Description ?? string.Empty;
             artifact.PublicNarrative = request.PublicNarrative ?? string.Empty;
-            artifact.DateDiscovered = request.DateDiscovered;
+            artifact.DateDiscoveredUtc = request.DateDiscoveredUtc;
             artifact.SiteId = request.SiteId;
-            artifact.Type = request.Type?.ToString() ?? string.Empty;
+            artifact.Type = request.Type;
 
-            await db.SaveChangesAsync(ct);
-
-            return true;
-        }
-
-        public async Task<bool> DeleteArtifactAsync(int id, CancellationToken ct)
-        {
-            var artifact = await db.Artifacts.FindAsync([id], ct);
-            if(artifact is null) return false;
-
-            db.Artifacts.Remove(artifact);
             await db.SaveChangesAsync(ct);
 
             return true;

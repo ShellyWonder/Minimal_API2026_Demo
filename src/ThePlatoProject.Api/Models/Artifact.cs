@@ -64,7 +64,13 @@
 
         //Nav properties for custody tracking
         public ApplicationUser? ShipmentSentBy { get; set; }
-        public ApplicationUser? ShipmentReceivedBy { get; set; } 
+        public ApplicationUser? ShipmentReceivedBy { get; set; }
+
+        // Explicit transfer-completion checkpoint
+        public DateTimeOffset? TransferCompletedAtUtc { get; set; }
+        public string? TransferCompletedById { get; set; }
+        public ApplicationUser? TransferCompletedBy { get; set; }
+
 
         //Nav properties 
         public List<ArtifactMediaFile> MediaFiles { get; set; } = [];
