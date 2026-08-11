@@ -9,11 +9,12 @@
         [Required, MaxLength(100)]
         public string Location { get; set; } = string.Empty;
 
-        [MaxLength(100)]
-        public string? Coordinates { get; set; }
-
         public double Latitude { get; set; }
+
         public double Longitude { get; set; }
+
+        public string Coordinates =>
+            FormattableString.Invariant($"{Latitude:F6}, {Longitude:F6}");
 
         [MaxLength(200)]
         public string? Description { get; set; }
