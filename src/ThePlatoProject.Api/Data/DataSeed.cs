@@ -189,7 +189,6 @@ public class DataSeed
         }
 
         site.Location = location;
-        site.Coordinates = $"{latitude:F4}, {longitude:F4}";
         site.Latitude = latitude;
         site.Longitude = longitude;
         site.Description ??= description;
