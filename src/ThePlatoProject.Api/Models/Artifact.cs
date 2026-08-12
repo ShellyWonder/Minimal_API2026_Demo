@@ -59,7 +59,7 @@
 
         [Required]
         public int SiteId { get; set; } //foreign key
-        public Site? Site { get; set; } //Nav property
+        public Site Site { get; set; } = null!; //Nav property
 
 
         //Nav properties for custody tracking
