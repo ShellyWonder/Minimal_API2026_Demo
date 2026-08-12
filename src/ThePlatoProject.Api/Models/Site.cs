@@ -1,4 +1,6 @@
-﻿namespace MinimalAPI2026Demo.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MinimalAPI2026Demo.Models
 {
     public class Site
     {
@@ -9,9 +11,6 @@
 
         [Required, MaxLength(100)]
         public string Location { get; set; } = string.Empty;
-
-        [MaxLength(100)]
-        public string? Coordinates { get; set; }
 
         public double Latitude { get; set; }
 

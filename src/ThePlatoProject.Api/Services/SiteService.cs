@@ -13,7 +13,6 @@
                                Id = s.Id,
                                Name = s.Name!,
                                Location = s.Location,
-                               Coordinates = s.Coordinates,
                                Latitude = s.Latitude,
                                Longitude = s.Longitude,
                                Description = s.Description,
@@ -31,7 +30,6 @@
                     Id = s.Id,
                     Name = s.Name!,
                     Location = s.Location,
-                    Coordinates = s.Coordinates,
                     Latitude = s.Latitude,
                     Longitude = s.Longitude,
                     Description = s.Description,
@@ -53,7 +51,6 @@
                            {
                                Id = s.Id,
                                Name = s.Name!,
-                               Coordinates = s.Coordinates,
                                Location = s.Location,
                                Latitude = s.Latitude,
                                Longitude = s.Longitude,
@@ -74,7 +71,6 @@
                     Id = s.Id,
                     Name = s.Name!,
                     Location = s.Location,
-                    Coordinates = s.Coordinates,
                     Latitude = s.Latitude,
                     Longitude = s.Longitude,
                     Description = s.Description,
@@ -94,11 +90,10 @@
             {
                 Name = request.Name,
                 Location = request.Location,
-                Coordinates = request.Coordinates,
                 Latitude = request.Latitude,
                 Longitude = request.Longitude,
                 Description = request.Description ?? "No description available.",
-                PublicNarrative = request.PublicNarrative,
+               PublicNarrative = request.PublicNarrative,
                 ALRECNarrative= request.ALRECNarrative ?? "No information available."
             };
             db.Sites.Add(site);
@@ -109,7 +104,6 @@
                 Id = site.Id,
                 Name = site.Name,
                 Location = site.Location,
-                Coordinates = site.Coordinates,
                 Latitude = site.Latitude,
                 Longitude = site.Longitude,
                 Description = site.Description,
@@ -125,7 +119,6 @@
 
             site.Name = request.Name;
             site.Location = request.Location;
-            site.Coordinates = request.Coordinates;
             site.Latitude = request.Latitude;
             site.Longitude = request.Longitude;
             site.Description = request.Description ?? "No description available.";
