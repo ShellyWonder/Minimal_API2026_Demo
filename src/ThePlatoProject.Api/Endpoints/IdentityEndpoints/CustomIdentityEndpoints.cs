@@ -16,8 +16,10 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
                  .WithSummary("Register a new user")
                  .WithDescription("This endpoint registers a user in an admin role.")
                  .Produces(StatusCodes.Status200OK)
-                 .Produces(StatusCodes.Status400BadRequest);
-            //.RequireAuthorization("AdminPolicy"); 
+                 .Produces(StatusCodes.Status400BadRequest)
+                 .RequireAuthorization(AppPolicies.ManageEmployees);
+
+
 
             group.MapPost("/reset-password", ResetPassword)  // ("/route", handler method)
                  .WithName("ResetPassword")
@@ -57,7 +59,8 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
                  .WithSummary("Allows current user to get a list of all registered app users.")
                 .Produces<IEnumerable<UserProfileResponse>>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status401Unauthorized)
-                .RequireAuthorization();
+                .RequireAuthorization(AppPolicies.ManageEmployees);
+                
 
 
             return route;
@@ -69,13 +72,13 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
         {
             var users = userManager.Users
                                .Select(u => new UserProfileResponse
-                                   {
-                                       Id = u.Id,
-                                       FirstName = u.FirstName,
-                                       LastName = u.LastName,
-                                       FullName = u.FullName,
-                                       Email = u.Email,
-                                   })
+                               {
+                                   Id = u.Id,
+                                   FirstName = u.FirstName,
+                                   LastName = u.LastName,
+                                   FullName = u.FullName,
+                                   Email = u.Email,
+                               })
                               .ToList();
 
             return Results.Ok(users);
@@ -190,7 +193,7 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
             )
         {
             //Check if the user already exists
-            if (await userManager.FindByEmailAsync(request.Email) is not null)
+            if (await userManager.FindByEmailAsync(request.Email!) is not null)
                 return Results.BadRequest($"User with email {request.Email} already exists.");
 
             //Create a new ApplicationUser instance with the provided information
@@ -198,8 +201,8 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
             {
                 UserName = request.Email,
                 Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName
+                FirstName = request.FirstName ?? "Unknown",
+                LastName = request.LastName ?? "Unknown"
             };
             var TempPassword = config["DefaultUserPassword"] ?? "TempP@ssw0rd123$";
             IdentityResult created = await userManager.CreateAsync(user, TempPassword);
@@ -217,12 +220,12 @@ namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
             //Send a confirmation email to the user 
             var baseUrl = config["BaseUrl"] ?? "https://localhost:7166"; //Route to the frontend page for email confirmation
             //TODO: Implement a proper email sending service and template for production use
-            await emailSender.SendEmailAsync(request.Email,
+            await emailSender.SendEmailAsync(request.Email!,
                 "Confirm your email",
                 $"""
                 Your account has been created.
-                Please confirm your account by clicking this link: <a href='{baseUrl}/confirm-email?email={request.Email}'>link</a>");
-                {baseUrl}/SetPassword.html?email={request.Email}&resetCode={encodedToken}
+                Please confirm your account by clicking this link: <a href='{baseUrl}/confirm-email?email={request.Email!}'>link</a>");
+                {baseUrl}/SetPassword.html?email={request.Email!}&resetCode={encodedToken}
                 """
                 );
 
