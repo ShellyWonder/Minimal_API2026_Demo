@@ -1,0 +1,32 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+
+@if (_isAuthenticated)
+{
+    <MudAlert Severity="Severity.Error" Class="ma-6">
+        You are signed in, but you do not have permission to view this page.
+        <MudLink Href="/access-denied">View access details</MudLink>
+    </MudAlert>
+}
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+        = default!;
+
+    private bool _isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState state = await AuthenticationStateTask;
+        _isAuthenticated = state.User.Identity?.IsAuthenticated == true;
+
+        if (!_isAuthenticated)
+        {
+            string returnUrl = Uri.EscapeDataString(
+                Navigation.ToBaseRelativePath(Navigation.Uri));
+
+            Navigation.NavigateTo($"/Account/Login?returnUrl={returnUrl}");
+        }
+    }
+}

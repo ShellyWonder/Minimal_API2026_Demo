@@ -1,0 +1,124 @@
+@page "/Account/Login"
+@using ThePlatoProject.Client.Services.Interfaces
+@using ThePlatoProject.Contracts.Authentication
+@inject IAuthenticationService LoginService
+@inject NavigationManager Navigation
+
+<PageTitle>Login | ALREC Group</PageTitle>
+
+<main class="login-page">
+    <MudContainer MaxWidth="MaxWidth.Small">
+        <MudPaper Elevation="4" Class="login-card pa-8">
+            <header class="login-heading">
+                <MudText Typo="Typo.h3" Class="login-title">
+                    ALREC Group
+                </MudText>
+                <MudText Typo="Typo.h6" Class="login-subtitle">
+                    Authorized personnel access
+                </MudText>
+            </header>
+
+            @if (!string.IsNullOrWhiteSpace(_errorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Class="mb-4">
+                    @_errorMessage
+                </MudAlert>
+            }
+
+            <EditForm Model="_input" OnValidSubmit="LoginAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary class="validation-summary" />
+
+                <MudTextField @bind-Value="_input.Email"
+                              For="@(() => _input.Email)"
+                              Label="Email"
+                              InputType="InputType.Email"
+                              AutoComplete="username"
+                              Variant="Variant.Outlined"
+                              Disabled="_submitting"
+                              Class="mb-4" />
+
+                <MudTextField @bind-Value="_input.Password"
+                              For="@(() => _input.Password)"
+                              Label="Password"
+                              InputType="InputType.Password"
+                              AutoComplete="current-password"
+                              Variant="Variant.Outlined"
+                              Disabled="_submitting"
+                              Class="mb-3" />
+
+                <MudCheckBox T="bool"
+                             @bind-Value="_input.RememberMe"
+                             Label="Remember me"
+                             Color="Color.Info"
+                             Disabled="_submitting"
+                             Class="mb-5" />
+
+                <MudButton ButtonType="ButtonType.Submit"
+                           Variant="Variant.Filled"
+                           Color="Color.Info"
+                           Size="Size.Large"
+                           FullWidth="true"
+                           Disabled="_submitting">
+                    @if (_submitting)
+                    {
+                        <MudProgressCircular Indeterminate="true"
+                                             Size="Size.Small"
+                                             Class="mr-2" />
+                    }
+                    Sign in
+                </MudButton>
+            </EditForm>
+        </MudPaper>
+    </MudContainer>
+</main>
+
+@code {
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private readonly PlatoLoginRequest _input = new();
+    private string? _errorMessage;
+    private bool _submitting;
+
+    private async Task LoginAsync()
+    {
+        _submitting = true;
+        _errorMessage = null;
+
+        try
+        {
+            AccountResult result = await LoginService.LoginAsync(_input);
+
+            if (!result.Succeeded)
+            {
+                _errorMessage = result.ErrorMessage;
+                return;
+            }
+
+            Navigation.NavigateTo(GetSafeReturnUrl());
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+
+    private string GetSafeReturnUrl()
+    {
+        if (string.IsNullOrWhiteSpace(ReturnUrl) ||
+            Uri.TryCreate(ReturnUrl, UriKind.Absolute, out _))
+        {
+            return "/";
+        }
+
+        string candidate = ReturnUrl.Replace('\\', '/');
+
+        if (candidate.StartsWith("//", StringComparison.Ordinal))
+        {
+            return "/";
+        }
+
+        return candidate.StartsWith('/') ? candidate : $"/{candidate}";
+    }
+}

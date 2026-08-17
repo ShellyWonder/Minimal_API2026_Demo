@@ -1,0 +1,16 @@
+@page "/Account/Logout"
+@using ThePlatoProject.Client.Services.Interfaces
+@inject IAuthenticationService AccountService
+@inject NavigationManager Navigation
+
+<PageTitle>Signing out | ALREC Group</PageTitle>
+
+<MudProgressCircular Indeterminate="true" Color="Color.Info" Class="ma-6" />
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await AccountService.LogoutAsync();
+        Navigation.NavigateTo("/", replace: true);
+    }
+}

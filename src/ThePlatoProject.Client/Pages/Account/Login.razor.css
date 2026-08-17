@@ -1,0 +1,37 @@
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1rem;
+    background:
+        radial-gradient(circle at top, rgba(0, 215, 239, 0.12), transparent 34rem),
+        #090c0e;
+}
+
+.login-card {
+    color: #e8f7fa;
+    background: rgba(10, 14, 16, 0.96);
+    border: 1px solid #00d7ef;
+    border-radius: 10px;
+    box-shadow: 0 0 26px rgba(0, 215, 239, 0.16);
+}
+
+.login-heading {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-title {
+    color: #00d7ef;
+    letter-spacing: 0.12em;
+}
+
+.login-subtitle {
+    color: #91a8ad;
+    letter-spacing: 0.06em;
+}
+
+.validation-summary {
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+}
