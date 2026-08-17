@@ -2,10 +2,9 @@ using MinimalAPI2026Demo.Authorization;
 
 namespace MinimalAPI2026Demo.Services;
 
-public class PlatoAuthorizationService(
-    ApplicationDbContext db,
-    ICurrentEmployeeService currentEmployeeService)
-    : IPlatoAuthorizationService
+public class PlatoAuthorizationService(ApplicationDbContext db,
+                                        ICurrentEmployeeService currentEmployeeService)
+                                        : IPlatoAuthorizationService
 {
     public async Task<bool> CanViewSiteAsync(
         ClaimsPrincipal principal,
