@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
+﻿using Microsoft.AspNetCore.WebUtilities;
 
-namespace MinimalAPI2026Demo.Endpoints.CustomIdentityEndpoints
+namespace MinimalAPI2026Demo.Endpoints.IdentityEndpoints
 {
     public static class CustomIdentityEndpoints
     {
