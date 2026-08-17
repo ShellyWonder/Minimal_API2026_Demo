@@ -1,3 +1,4 @@
+using ThePlatoProject.Client.Authorization.Records;
 using ThePlatoProject.Contracts.Authentication;
 
 namespace ThePlatoProject.Client.Services.Interfaces;
