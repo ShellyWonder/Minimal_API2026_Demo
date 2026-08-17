@@ -1,32 +1,12 @@
-
-using System.Data;
+using MinimalAPI2026Demo.Extensions.ProgramExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCustomServices(); //// Register domain services
 builder.Services.AddCustomSwagger();
-//data base connection
-var connectionString = DataUtility.GetConnectionString(builder.Configuration);
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
-// Add Identity services
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = false;
-})
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-//Admin policy
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
-builder.Services.AddScoped<ISiteService, SiteService>();
-builder.Services.AddScoped<IArtifactService , ArtifactService>();
-builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
-builder.Services.AddScoped<ICatalogRecordsService, CatalogRecordsService>();
-//enable validation
-builder.Services.AddValidation();
-
+builder.Services.AddPersistence(builder.Configuration); // Register database context and connection
+builder.Services.AddIdentityAndAuthentication(); // Register Identity and Authentication services
 
 var app = builder.Build();
 
@@ -36,24 +16,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//seed the database with initial data from the DataUtility class
 using (var scope = app.Services.CreateScope())
 {
     await DataSeed.ManageDataAsync(scope.ServiceProvider);
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseMiddleware<BlockIdentityEndpoints>();
-
-var authRouteGroup = app.MapGroup("api/auth").WithTags("Admin");
-authRouteGroup.MapIdentityApi<ApplicationUser>();
-app.MapCustomIdentityEndpoints(); // Map custom identity endpoints
-app.MapHomeEndpoints(); // Map Home endpoints
-app.MapSiteEndpoints(); // Map Site endpoints
-app.MapArtifactEndpoints(); // Map Artifact endpoints
-app.MapArtifactMediaEndpoints(); //Map Artifact Image endpoints
-app.MapCatalogRecordsEndpoints(); // Map Catalog Record endpoints
+app.UsePlatoProjectPipeline(); //middleware pipeline configuration
+app.MapPlatoProjectEndpoints(); //map endpoints 
 app.Run();
 
