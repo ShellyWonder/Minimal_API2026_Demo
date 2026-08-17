@@ -3,7 +3,8 @@
 
 @using MudBlazor;
 
-
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Components.Authorization;
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -14,11 +15,16 @@
 @using ThePlatoProject
 
 @using using ThePlatoProject.Client;
+@using ThePlatoProject.Client.Services.Interfaces
+@using using ThePlatoProject.Client.Services;
+@using ThePlatoProject.Client.Authentication;
 @using using ThePlatoProject.Client.Themes;
 
 @using ThePlatoProject.Client.Layout
 
 @using ThePlatoProject.Contracts
+@using ThePlatoProject.Contracts.Authentication;
+@using ThePlatoProject.Contracts.Authorization;
 @using ThePlatoProject.Contracts.Requests
 @using ThePlatoProject.Contracts.Responses
 @using ThePlatoProject.Contracts.Enums
