@@ -81,6 +81,7 @@
             //Method not using a service because no business logic is executed - just a pull from db;
             var image = await db.MediaFiles
                                 .AsNoTracking()
+                                 .Where(PublicEligibility.MediaFiles)
                                 .FirstOrDefaultAsync(m => m.Id == id, ct);
             if (image == null || image.Data.Length == 0) return TypedResults.NotFound();
 
