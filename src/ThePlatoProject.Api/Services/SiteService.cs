@@ -8,6 +8,7 @@
 
             return await db.Sites
                            .AsNoTracking()
+                           .Where(PublicEligibility.Sites)
                            .Select(s => new PublicSiteResponse
                            {
                                Id = s.Id,
@@ -46,6 +47,7 @@
         {
             return await db.Sites
                            .AsNoTracking()
+                           .Where(PublicEligibility.Sites)
                            .Where(s => s.Id == id)
                            .Select(s => new PublicSiteResponse
                            {

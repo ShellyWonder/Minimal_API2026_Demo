@@ -10,6 +10,7 @@ namespace MinimalAPI2026Demo.Services
         {
             return await db.Artifacts
                            .AsNoTracking()
+                           .Where(PublicEligibility.Artifacts)
                            .Include(a => a.Site)
                            .Include(a => a.MediaFiles)
                            .Select(a => new PublicArtifactResponse
@@ -23,11 +24,12 @@ namespace MinimalAPI2026Demo.Services
                                //navigation properties
                                SiteName = a.Site != null ? a.Site.Name! : string.Empty,
                                PrimaryImageUrl = a.MediaFiles
-                                                .Where(m => m.IsPrimary)
+                                                .Where(m => m.IsPrimary &&
+                                                 m.VerificationStatus == VerificationStatus.Verified)
                                                 .Select(m => $"/api/public/artifacts/images/{m.Id}")
                                                 .FirstOrDefault()
                            })
-                
+
                             .ToListAsync(ct);
         }
 
@@ -64,10 +66,11 @@ namespace MinimalAPI2026Demo.Services
             var siteExists = await db.Sites
                                      .AsNoTracking()
                                      .AnyAsync(s => s.Id == siteId, ct);
-            if(!siteExists) return [];
+            if (!siteExists) return [];
 
             return await db.Artifacts
                            .AsNoTracking()
+                           .Where(PublicEligibility.Artifacts)
                            .Include(a => a.Site)
                            .Include(a => a.MediaFiles)
                            .Where(a => a.SiteId == siteId)
@@ -81,7 +84,8 @@ namespace MinimalAPI2026Demo.Services
                                Type = a.Type!.ToString() ?? "unknown",
                                SiteName = a.Site != null ? a.Site.Name! : string.Empty,
                                PrimaryImageUrl = a.MediaFiles
-                                    .Where(m => m.IsPrimary)
+                                    .Where(m => m.IsPrimary
+                                     && m.VerificationStatus == VerificationStatus.Verified)
                                     .Select(m => $"/api/public/artifacts/images/{m.Id}")
                                     .FirstOrDefault()
 
@@ -101,7 +105,7 @@ namespace MinimalAPI2026Demo.Services
                            .Include(a => a.Site)
                            .Include(a => a.MediaFiles)
                            .Where(a => a.SiteId == siteId)
-                           .Select(a => new PrivateArtifactResponse 
+                           .Select(a => new PrivateArtifactResponse
                            {
                                Id = a.Id,
                                Name = a.Name,
@@ -125,6 +129,7 @@ namespace MinimalAPI2026Demo.Services
         {
             return await db.Artifacts
                            .AsNoTracking()
+                           .Where(PublicEligibility.Artifacts)
                            .Where(a => a.Id == Id)
                            .Include(a => a.Site)
                            .Include(a => a.MediaFiles)
@@ -138,35 +143,36 @@ namespace MinimalAPI2026Demo.Services
                                Type = a.Type!.ToString() ?? "unknown",
                                SiteName = a.Site != null ? a.Site.Name! : "unknown",
                                PrimaryImageUrl = a.MediaFiles
-                                    .Where(m => m.IsPrimary)
+                                    .Where(m => m.IsPrimary
+                                    && m.VerificationStatus == VerificationStatus.Verified)
                                     .Select(m => $"/api/public/artifacts/images/{m.Id}")
                                     .FirstOrDefault()
-                           }) 
+                           })
                            .FirstOrDefaultAsync(ct);
         }
 
         public async Task<PrivateArtifactResponse?> GetPrivateArtifactByIdAsync(int Id, CancellationToken ct)
         {
-             return await db.Artifacts
-                           .AsNoTracking()
-                           .Where(a => a.Id == Id)
-                           .Include(a => a.Site)
-                           .Include(a => a.MediaFiles)
-                           .Select(a => new PrivateArtifactResponse
-                           {
-                               Id = a.Id,
-                               Name = a.Name,
-                               CatalogNumber = a.CatalogNumber ?? string.Empty,
-                               PublicNarrative = a.PublicNarrative ?? string.Empty,
-                               DateDiscoveredUtc = a.DateDiscoveredUtc,
-                               Type = a.Type!.ToString() ?? "unknown",
-                               SiteName = a.Site != null ? a.Site.Name! : "unknown",
-                               PrimaryImageUrl = a.MediaFiles
-                                    .Where(m => m.IsPrimary)
-                                    .Select(m => $"/api/private/artifacts/images/{m.Id}")
-                                    .FirstOrDefault()
-                           })
-                           .FirstOrDefaultAsync(ct);
+            return await db.Artifacts
+                          .AsNoTracking()
+                          .Where(a => a.Id == Id)
+                          .Include(a => a.Site)
+                          .Include(a => a.MediaFiles)
+                          .Select(a => new PrivateArtifactResponse
+                          {
+                              Id = a.Id,
+                              Name = a.Name,
+                              CatalogNumber = a.CatalogNumber ?? string.Empty,
+                              PublicNarrative = a.PublicNarrative ?? string.Empty,
+                              DateDiscoveredUtc = a.DateDiscoveredUtc,
+                              Type = a.Type!.ToString() ?? "unknown",
+                              SiteName = a.Site != null ? a.Site.Name! : "unknown",
+                              PrimaryImageUrl = a.MediaFiles
+                                   .Where(m => m.IsPrimary)
+                                   .Select(m => $"/api/private/artifacts/images/{m.Id}")
+                                   .FirstOrDefault()
+                          })
+                          .FirstOrDefaultAsync(ct);
         }
 
         #endregion
@@ -217,7 +223,7 @@ namespace MinimalAPI2026Demo.Services
             };
         }
 
-        public async Task<bool>UpdateArtifactAsync(int artifactId, UpdateArtifactRequest request, CancellationToken ct)
+        public async Task<bool> UpdateArtifactAsync(int artifactId, UpdateArtifactRequest request, CancellationToken ct)
         {
             //Check site exists
             var siteExists = await db.Sites

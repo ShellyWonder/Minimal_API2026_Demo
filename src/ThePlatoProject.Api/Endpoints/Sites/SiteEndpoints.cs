@@ -38,7 +38,7 @@
                 .WithSummary("Get public site by id")
                 .WithDescription("Returns publically available site data on a specific site using the unique site id.");
 
-            publicGroup.MapGet("/{siteId:int}/artifacts",GetPublicArtifactsBySite)
+            publicGroup.MapGet("/{siteId:int}/artifacts", GetPublicArtifactsBySite)
                 .WithName(nameof(GetPublicArtifactsBySite))
                 .Produces<PublicArtifactResponse>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status404NotFound)
@@ -102,7 +102,7 @@
                .WithSummary("Update site by authorized user.")
                .WithDescription("Updates an existing site by Id if executed by an authorized user.");
             #endregion
-                        
+
             return route;
         }
 
@@ -112,8 +112,8 @@
             return TypedResults.Ok(await service.GetAllSitesPublicAsync(ct));
         }
 
-        private static async Task<Results<Ok<PublicSiteResponse>, NotFound>> GetPublicSiteById(int id, 
-                                                                             ISiteService service, 
+        private static async Task<Results<Ok<PublicSiteResponse>, NotFound>> GetPublicSiteById(int id,
+                                                                             ISiteService service,
                                                                              CancellationToken ct)
         {
             var site = await service.GetPublicSiteByIdAsync(id, ct);
@@ -127,8 +127,8 @@
             return TypedResults.Ok(await service.GetAllPrivateSitesAsync(ct));
         }
 
-        private static async Task<Results<Ok<PrivateSiteResponse>, NotFound>> GetPrivateSiteById(int id, 
-                                                                               ISiteService service, 
+        private static async Task<Results<Ok<PrivateSiteResponse>, NotFound>> GetPrivateSiteById(int id,
+                                                                               ISiteService service,
                                                                                CancellationToken ct)
         {
             var site = await service.GetPrivateSiteByIdAsync(id, ct);
@@ -136,8 +136,8 @@
 
             return TypedResults.Ok(site);
         }
-        private static async Task<Results<Ok<List<PublicArtifactResponse>>, NotFound>> GetPublicArtifactsBySite(int siteId, 
-                                                                                                                IArtifactService service, 
+        private static async Task<Results<Ok<List<PublicArtifactResponse>>, NotFound>> GetPublicArtifactsBySite(int siteId,
+                                                                                                                IArtifactService service,
                                                                                                                 CancellationToken ct)
         {
             var artifacts = await service.GetPublicArtifactsBySiteAsync(siteId, ct);
@@ -151,27 +151,27 @@
                                                                                                                   CancellationToken ct)
         {
             var artifacts = await service.GetPrivateArtifactsBySiteAsync(siteId, ct);
-            if(artifacts is null || artifacts.Count == 0) return TypedResults.NotFound();
+            if (artifacts is null || artifacts.Count == 0) return TypedResults.NotFound();
             return TypedResults.Ok(artifacts);
         }
 
 
-        private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request, 
-                                                                                            ISiteService service, 
+        private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request,
+                                                                                            ISiteService service,
                                                                                             CancellationToken ct)
         {
-           
+
             var createdSite = await service.CreateSiteAsync(request, ct);
 
-           
-            return TypedResults.Created($"/api/private/sites/{createdSite.Id}",createdSite);
+
+            return TypedResults.Created($"/api/private/sites/{createdSite.Id}", createdSite);
         }
 
-        private static async Task<Results<NoContent,NotFound, ValidationProblem>> UpdateSite(int id, 
-                                                                                  UpdateSiteRequest request, 
-                                                                                  ISiteService service, 
+        private static async Task<Results<NoContent, NotFound, ValidationProblem>> UpdateSite(int id,
+                                                                                  UpdateSiteRequest request,
+                                                                                  ISiteService service,
                                                                                   CancellationToken ct)
-        { 
+        {
             var success = await service.UpdateSiteAsync(id, request, ct);
             return success ? TypedResults.NoContent() : TypedResults.NotFound();
 
