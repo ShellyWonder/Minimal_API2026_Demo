@@ -1,0 +1,21 @@
+﻿@* BackToBtn *@
+@* Displays a text button with a left arrow. Accepts Text and Href. *@
+
+<MudButton Variant="Variant.Text"
+           Class="project-details-link"
+           Color="Color.Secondary"
+           Href="@(Disabled || string.IsNullOrWhiteSpace(Href) ? null : Href)"
+           StartIcon="@Icons.Material.Filled.ArrowBack">
+    @Text
+</MudButton>
+
+@code {
+    [Parameter, EditorRequired]
+    public string? Text { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? Href { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+}
