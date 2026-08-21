@@ -1,0 +1,17 @@
+﻿
+@* Mark Logo -- use against dark backgrounds*@
+ <div class="logo-container">
+    <a href="/">
+        <img src="/img/branding/alrec-mark-clear.png" alt="ALREC Group Logo" class="logo-image" />
+    </a>
+    
+    @if (!string.IsNullOrWhiteSpace(Tagline))
+    {
+        <span class="logo-tagline" aria-label="Logo tagline">@Tagline</span>
+    }
+</div>
+@code {
+    [Parameter]
+    public string? Tagline { get; set; }
+
+}
